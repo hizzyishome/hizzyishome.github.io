@@ -14,7 +14,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -84,7 +84,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Gemini',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
@@ -266,9 +266,6 @@
   
 
   
-    
-
-  
 
   
 </nav>
@@ -288,6 +285,9 @@
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
+            
+
           
           <div id="content" class="content">
             
@@ -414,8 +414,8 @@
       
 
       
-        <h5 id="一直想把数据结构和算法再过一遍，奈何工作以后想要静下心来学习是一种奢侈的想法。"><a href="#一直想把数据结构和算法再过一遍，奈何工作以后想要静下心来学习是一种奢侈的想法。" class="headerlink" title="一直想把数据结构和算法再过一遍，奈何工作以后想要静下心来学习是一种奢侈的想法。"></a>一直想把数据结构和算法再过一遍，奈何工作以后想要静下心来学习是一种奢侈的想法。</h5><h5 id="最近断断续续把链表这种最基础的数据结构撕开了揉碎了自己过了一遍，算作备忘吧，如果对你有用，更加荣幸。"><a href="#最近断断续续把链表这种最基础的数据结构撕开了揉碎了自己过了一遍，算作备忘吧，如果对你有用，更加荣幸。" class="headerlink" title="最近断断续续把链表这种最基础的数据结构撕开了揉碎了自己过了一遍，算作备忘吧，如果对你有用，更加荣幸。"></a>最近断断续续把链表这种最基础的数据结构撕开了揉碎了自己过了一遍，算作备忘吧，如果对你有用，更加荣幸。</h5><h3 id="链表及其变体的特点"><a href="#链表及其变体的特点" class="headerlink" title="链表及其变体的特点"></a>链表及其变体的特点</h3><p><img src="./链表类型和优势.png" alt="链表类型和优势"><br>大概的一个意思，其实说来就是，双向便于回溯找到某节点前一个节点；带头节点（也叫哨兵节点）便于处理边界节点逻辑，统一代码逻辑；循环从任意一个节点开<br>都可以遍历整个链表。当然越复杂占用空间越多，但是能大幅度优化时间复杂度，这点空间付出是很值得的。</p>
-<h3 id="链表成员变量方法示意图"><a href="#链表成员变量方法示意图" class="headerlink" title="链表成员变量方法示意图"></a>链表成员变量方法示意图</h3><p><img src="./LinkedList.png" alt="LinkedList"></p>
+        <h5 id="一直想把数据结构和算法再过一遍，奈何工作以后想要静下心来学习是一种奢侈的想法。"><a href="#一直想把数据结构和算法再过一遍，奈何工作以后想要静下心来学习是一种奢侈的想法。" class="headerlink" title="一直想把数据结构和算法再过一遍，奈何工作以后想要静下心来学习是一种奢侈的想法。"></a>一直想把数据结构和算法再过一遍，奈何工作以后想要静下心来学习是一种奢侈的想法。</h5><h5 id="最近断断续续把链表这种最基础的数据结构撕开了揉碎了自己过了一遍，算作备忘吧，如果对你有用，更加荣幸。"><a href="#最近断断续续把链表这种最基础的数据结构撕开了揉碎了自己过了一遍，算作备忘吧，如果对你有用，更加荣幸。" class="headerlink" title="最近断断续续把链表这种最基础的数据结构撕开了揉碎了自己过了一遍，算作备忘吧，如果对你有用，更加荣幸。"></a>最近断断续续把链表这种最基础的数据结构撕开了揉碎了自己过了一遍，算作备忘吧，如果对你有用，更加荣幸。</h5><h3 id="链表及其变体的特点"><a href="#链表及其变体的特点" class="headerlink" title="链表及其变体的特点"></a>链表及其变体的特点</h3><p><img src="/2018/10/18/手撕链表/链表类型和优势.png" alt="链表类型和优势"><br>大概的一个意思，其实说来就是，双向便于回溯找到某节点前一个节点；带头节点（也叫哨兵节点）便于处理边界节点逻辑，统一代码逻辑；循环从任意一个节点开<br>都可以遍历整个链表。当然越复杂占用空间越多，但是能大幅度优化时间复杂度，这点空间付出是很值得的。</p>
+<h3 id="链表成员变量方法示意图"><a href="#链表成员变量方法示意图" class="headerlink" title="链表成员变量方法示意图"></a>链表成员变量方法示意图</h3><p><img src="/2018/10/18/手撕链表/LinkedList.png" alt="LinkedList"></p>
 <p>基于Jdk 8 中的LinkedList源码。<br>可以看到Jdk 8 中的链表实现了List 和 Dueue（双端队列）接口（其他序列化通用接口等忽略）。<br>核心操作图中已经标出来。下面通过初次想法对比jdk实现，做出总结和对比。</p>
 <h4 id="1-linkFirst"><a href="#1-linkFirst" class="headerlink" title="1. linkFirst"></a>1. linkFirst</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// train</span><br><span class="line">public void linkFirst(T t)&#123;</span><br><span class="line">    Node&lt;T&gt; tNode = new Node&lt;T&gt;(t);</span><br><span class="line">    if (head != null) &#123;</span><br><span class="line">        Node&lt;T&gt; item = head;</span><br><span class="line">        head = tNode;</span><br><span class="line">        head.next = item;</span><br><span class="line">    &#125; else &#123;// empty list</span><br><span class="line">        head = tNode;</span><br><span class="line">        tail = tNode;</span><br><span class="line">    &#125;</span><br><span class="line">    size++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// JDK</span><br><span class="line">private void linkFirst(E e) &#123;</span><br><span class="line">    final Node&lt;E&gt; f = first;</span><br><span class="line">    final Node&lt;E&gt; newNode = new Node&lt;&gt;(null, e, f);</span><br><span class="line">    first = newNode;</span><br><span class="line">    if (f == null)</span><br><span class="line">        last = newNode;</span><br><span class="line">    else</span><br><span class="line">        f.prev = newNode;</span><br><span class="line">    size++;</span><br><span class="line">    modCount++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -828,7 +828,7 @@
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Muse</a> v6.3.0</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Gemini</a> v6.3.0</div>
 
 
 
@@ -953,6 +953,13 @@
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>

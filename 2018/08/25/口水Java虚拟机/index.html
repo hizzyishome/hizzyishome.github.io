@@ -14,7 +14,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -84,7 +84,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Gemini',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
@@ -267,9 +267,6 @@
   
 
   
-    
-
-  
 
   
 </nav>
@@ -289,6 +286,9 @@
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
+            
+
           
           <div id="content" class="content">
             
@@ -438,7 +438,7 @@
 <li>和X86的段式内存管理类似，Java虚拟机也在内存中划分出堆和栈来存储运行时数据。</li>
 <li>不同的是，Java虚拟机将栈细分为面向Java方法的Java方法栈，面向本地方法（用 C++ 写的 native 方法）的本地方法栈，<br>以及存放各个线程执行位置的PC寄存器。</li>
 </ul>
-<p><img src="./1.png" alt="1">  </p>
+<p><img src="/2018/08/25/口水Java虚拟机/1.png" alt="1">  </p>
 <ul>
 <li>从硬件视角来看，Java 字节码无法直接执行。因此，Java 虚拟机需要将字节码翻译成机器码。</li>
 </ul>
@@ -457,13 +457,13 @@
 <li>C2 又叫做 Server 编译器，面向的是对峰值性能有要求的服务器端程序，采用的优化手段相对复杂，因此编译时间较长，但同时生成代码的执行效率较高。</li>
 <li>Java 7 开始，HotSpot 默认采用分层编译的方式：热点方法首先会被 C1 编译，而后热点方法中的热点会进一步被 C2 编译。</li>
 <li>为了不干扰应用的正常运行，HotSpot 的即时编译是放在额外的编译线程中进行的,根据 CPU 的数量设置编译线程的数目，<br>并且按 1:2 的比例配置给 C1 及 C2 编译器。</li>
-<li>在计算资源充足的情况下，字节码的解释执行和即时编译可同时进行。编译完成后的机器码会在下次调用该方法时启用，以替换原本的解释执行。<br><img src="./2.png" alt="2"></li>
+<li>在计算资源充足的情况下，字节码的解释执行和即时编译可同时进行。编译完成后的机器码会在下次调用该方法时启用，以替换原本的解释执行。<br><img src="/2018/08/25/口水Java虚拟机/2.png" alt="2"></li>
 </ul>
 <h2 id="Java-虚拟机的-boolean-类型"><a href="#Java-虚拟机的-boolean-类型" class="headerlink" title="Java 虚拟机的 boolean 类型"></a>Java 虚拟机的 boolean 类型</h2><ul>
 <li>在 Java 语言规范中，boolean 类型的值只有符号“true”和“false”。显然，这两个符号是不能被虚拟机直接使用的。</li>
 <li>在 Java 虚拟机规范中，boolean 类型则被映射成 int 类型。具体来说，“true”被映射为整数 1，而“false”被映射为整数 0。<br>这个编码规则约束了 Java 字节码的具体实现。</li>
 </ul>
-<h2 id="Java-的基本类型"><a href="#Java-的基本类型" class="headerlink" title="Java 的基本类型"></a>Java 的基本类型</h2><p><img src="./3.png" alt="3"></p>
+<h2 id="Java-的基本类型"><a href="#Java-的基本类型" class="headerlink" title="Java 的基本类型"></a>Java 的基本类型</h2><p><img src="/2018/08/25/口水Java虚拟机/3.png" alt="3"></p>
 <ul>
 <li>byte、short、int、long、float 以及 double 的值域依次扩大，而且前面的值域被后面的值域所包含。<br>从前面的基本类型转换至后面的基本类型，无需强制转换。尽管他们的默认值看起来不一样，但在内存中都是 0。</li>
 <li>在这些基本类型中，boolean 和 char 是唯二的无符号类型。在不考虑违反规范的情况下，boolean 类型的取值范围是 0 或者 1。<br>char 类型的取值范围则是 [0, 65535]。通常我们可以认定 char 类型的值为非负数。这种特性十分有用，比如说作为数组索引等。</li>
@@ -798,7 +798,7 @@
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Muse</a> v6.3.0</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Gemini</a> v6.3.0</div>
 
 
 
@@ -923,6 +923,13 @@
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
