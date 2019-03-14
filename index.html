@@ -304,6 +304,372 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/14/java-base-point-and-think/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Howard">
+      <meta itemprop="description" content="午夜向日葵，晌午夜光杯。跛者脚下路，屠夫腕上佛。">
+      <meta itemprop="image" content="/images/avatar/P1070776.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="华氏温度">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/14/java-base-point-and-think/" itemprop="url">
+                  java base point and think
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+
+              
+                
+              
+
+              <time title="Post created: 2019-03-14 15:50:00" itemprop="dateCreated datePublished" datetime="2019-03-14T15:50:00+08:00">2019-03-14</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/14/java-base-point-and-think/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/14/java-base-point-and-think/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="有时候走了太久太远，都忘了为什么出发了。"><a href="#有时候走了太久太远，都忘了为什么出发了。" class="headerlink" title="有时候走了太久太远，都忘了为什么出发了。"></a>有时候走了太久太远，都忘了为什么出发了。</h4><ol>
+<li>面向过程和面向对象<ol>
+<li>面向过程<ol>
+<li>概：面向对象在我印象里是最初在C中获得的，注重顺序思维，结构化编程，即使封装<br>函数也是为了复用，而不是降低耦合。</li>
+<li>优点：比面向对象性能更好，不用实例化，节省资源。性能因素占绝对重要性时，<br>优考虑面向过程的开发。</li>
+<li>缺点：流式思维，不符合客观世界规律，比起面向对象，更难维护、复用和、扩展。</li>
+</ol>
+</li>
+<li>面向对象：<ol>
+<li>概：是现实世界关系的抽象，符合现实世界的逻辑规律。</li>
+<li>优点：抑郁维护复用和扩展。有封装、继承和多态的特性。</li>
+<li>缺点：资源开销大，性能比面向过程差。</li>
+</ol>
+</li>
+<li>言之： 现在除了特别对性能有要求的一些项目，对于更多的业务系统讲，机器资源一般是<br>较为满足的，更注重的是易维护，易扩展，业务系统大概占据了软件开发项目八成，所以在业务系统上，<br>采用面向对象的方式进行开发。（现在的互联网行业人员流动那么大，程序员的编程水平习惯参差不齐，<br>如果还不注重维护性和扩展性的话，那大概就是前人挖坑闪后人，后人再挖，闪后后人，<br>子子孙孙无穷匮也。）</li>
+</ol>
+</li>
+<li><p>Java的特点</p>
+<ol>
+<li>优点：<ol>
+<li>学习成本底。（相比C和C++吧，比Python还差些 :smile:）</li>
+<li>面向对象。（C++也是面向对象的，严格的说面向对象是一种思想）</li>
+<li>平台无关。可移植性好。（只要这个平台有对应的jvm，你只管敲你的Java代码，<br>编译成class后，jvm去生产适配各个平台的机器指令。）</li>
+<li>可靠性。（因为强类型？怎么就比其他语言更可靠了？质疑）</li>
+<li>安全性。（和强类型有关，也没有C里指针的各种乱指）</li>
+<li>多线程支持。（C++没有内置的对多线程的支持，需要调用系统的多线程支持）</li>
+<li>方便的网络编程。（简化了网络编程是指对JavaWeb方向的扩展么？确实在C里网络编程中的<br>通信一些东西确实比较复杂。）</li>
+<li>编译与解释并存。（Java确实从解释语言里学了很多，这点是我很欣赏的，知道发展自身，<br>才是生存下去的道理。）</li>
+</ol>
+</li>
+<li>缺点：<ol>
+<li>初期性能经常与C系比较，确实差一些，但是现在的java性能已经不能被诟病了。<br>2.</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>JVM JDK JRE</p>
+<ol>
+<li>JVM（Java Virtual Machine）<ul>
+<li>运行java字节码，字节码class文件jvm能理解</li>
+<li>对不同系统有不同实现</li>
+<li>class文件只面向jvm，各个平台上都是一样的</li>
+<li>一方面解决了解释型语言效率低问题</li>
+<li>保留了解释性语言可移植性</li>
+<li>在不同平台上不需要重新编译，可以直接运行</li>
+<li>.java文件  – jdk中的javac –&gt; .class文件<br>-</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/21/初始的springboot项目的依赖分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Howard">
+      <meta itemprop="description" content="午夜向日葵，晌午夜光杯。跛者脚下路，屠夫腕上佛。">
+      <meta itemprop="image" content="/images/avatar/P1070776.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="华氏温度">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/21/初始的springboot项目的依赖分析/" itemprop="url">
+                  初始的springboot项目的依赖分析
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+
+              
+                
+              
+
+              <time title="Post created: 2019-01-21 17:41:03" itemprop="dateCreated datePublished" datetime="2019-01-21T17:41:03+08:00">2019-01-21</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/springboot/" itemprop="url" rel="index"><span itemprop="name">springboot</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/21/初始的springboot项目的依赖分析/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/21/初始的springboot项目的依赖分析/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="依赖分析"><a href="#依赖分析" class="headerlink" title="依赖分析"></a>依赖分析</h3><p>springboot项目从官网指引的步骤生成的项目，执行<code>mvn dependency:tree</code>，输出如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">com.XXX:demo:jar:0.0.1-SNAPSHOT</span><br><span class="line">+- org.springframework.boot:spring-boot-starter:jar:2.1.2.RELEASE:compile</span><br><span class="line">|  +- org.springframework.boot:spring-boot:jar:2.1.2.RELEASE:compile</span><br><span class="line">|  |  \- org.springframework:spring-context:jar:5.1.4.RELEASE:compile</span><br><span class="line">|  |     +- org.springframework:spring-aop:jar:5.1.4.RELEASE:compile</span><br><span class="line">|  |     +- org.springframework:spring-beans:jar:5.1.4.RELEASE:compile</span><br><span class="line">|  |     \- org.springframework:spring-expression:jar:5.1.4.RELEASE:compile</span><br><span class="line">|  +- org.springframework.boot:spring-boot-autoconfigure:jar:2.1.2.RELEASE:compile</span><br><span class="line">|  +- org.springframework.boot:spring-boot-starter-logging:jar:2.1.2.RELEASE:compile</span><br><span class="line">|  |  +- ch.qos.logback:logback-classic:jar:1.2.3:compile</span><br><span class="line">|  |  |  \- ch.qos.logback:logback-core:jar:1.2.3:compile</span><br><span class="line">|  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.11.1:compile</span><br><span class="line">|  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.11.1:compile</span><br><span class="line">|  |  \- org.slf4j:jul-to-slf4j:jar:1.7.25:compile</span><br><span class="line">|  +- javax.annotation:javax.annotation-api:jar:1.3.2:compile</span><br><span class="line">|  +- org.springframework:spring-core:jar:5.1.4.RELEASE:compile</span><br><span class="line">|  |  \- org.springframework:spring-jcl:jar:5.1.4.RELEASE:compile</span><br><span class="line">|  \- org.yaml:snakeyaml:jar:1.23:runtime</span><br><span class="line">\- org.springframework.boot:spring-boot-starter-test:jar:2.1.2.RELEASE:<span class="built_in">test</span></span><br><span class="line">   +- org.springframework.boot:spring-boot-test:jar:2.1.2.RELEASE:<span class="built_in">test</span></span><br><span class="line">   +- org.springframework.boot:spring-boot-test-autoconfigure:jar:2.1.2.RELEASE:<span class="built_in">test</span></span><br><span class="line">   +- com.jayway.jsonpath:json-path:jar:2.4.0:<span class="built_in">test</span></span><br><span class="line">   |  +- net.minidev:json-smart:jar:2.3:<span class="built_in">test</span></span><br><span class="line">   |  |  \- net.minidev:accessors-smart:jar:1.2:<span class="built_in">test</span></span><br><span class="line">   |  |     \- org.ow2.asm:asm:jar:5.0.4:<span class="built_in">test</span></span><br><span class="line">   |  \- org.slf4j:slf4j-api:jar:1.7.25:compile</span><br><span class="line">   +- junit:junit:jar:4.12:<span class="built_in">test</span></span><br><span class="line">   +- org.assertj:assertj-core:jar:3.11.1:<span class="built_in">test</span></span><br><span class="line">   +- org.mockito:mockito-core:jar:2.23.4:<span class="built_in">test</span></span><br><span class="line">   |  +- net.bytebuddy:byte-buddy:jar:1.9.7:<span class="built_in">test</span></span><br><span class="line">   |  +- net.bytebuddy:byte-buddy-agent:jar:1.9.7:<span class="built_in">test</span></span><br><span class="line">   |  \- org.objenesis:objenesis:jar:2.6:<span class="built_in">test</span></span><br><span class="line">   +- org.hamcrest:hamcrest-core:jar:1.3:<span class="built_in">test</span></span><br><span class="line">   +- org.hamcrest:hamcrest-library:jar:1.3:<span class="built_in">test</span></span><br><span class="line">   +- org.skyscreamer:jsonassert:jar:1.5.0:<span class="built_in">test</span></span><br><span class="line">   |  \- com.vaadin.external.google:android-json:jar:0.0.20131108.vaadin1:<span class="built_in">test</span></span><br><span class="line">   +- org.springframework:spring-test:jar:5.1.4.RELEASE:<span class="built_in">test</span></span><br><span class="line">   \- org.xmlunit:xmlunit-core:jar:2.6.2:<span class="built_in">test</span></span><br></pre></td></tr></table></figure></p>
+<p>这个直观一点：<br><img src="/2019/01/21/初始的springboot项目的依赖分析/demo.png" alt="LinkedList"></p>
+<p>###</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/21/干炒springboot心得/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1534,7 +1900,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">Artikel</span>
                   </a>
                 </div>
@@ -1553,7 +1919,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">3</span>
+                      
+                    
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">Kategorien</span>
                   </a>
                 </div>
@@ -1586,7 +1954,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">10</span>
+                      
+                    
+                    <span class="site-state-item-count">11</span>
                     <span class="site-state-item-name">Tags</span>
                   </a>
                 </div>
@@ -1654,7 +2024,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -1866,6 +2236,10 @@
 
   
   
+    
+      
+    
+      
     
       
     
