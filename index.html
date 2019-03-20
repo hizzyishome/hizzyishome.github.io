@@ -487,9 +487,9 @@
 <li>C++： 提供指针   类可以多继承   需要程序员释放内存</li>
 </ol>
 </li>
-<li><p>字符型常量和字符串常量的区别</p>
-<ol>
-<li><code>char c = &#39;c&#39;;  String s = &quot;sss&quot;;</code></li>
+<li><p>字符型常量和字符串常量的区别<br> 1.</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> c = <span class="string">'c'</span>;  String s = <span class="string">"sss"</span>;</span><br></pre></td></tr></table></figure>
+<ol start="2">
 <li>字符相当于ascII值，可以参加运算。字符串代表地址，即在内存中存放位置。</li>
 <li>char类型占2个字节 2*8bit = 16bit；字符串至少一个，结束标志（这句并不对，<br>在C++中，以\0作为结束，但是在Java中，String是对象，有长度属性，不需要表示结尾）</li>
 </ol>
@@ -668,7 +668,229 @@
 <li>基本类型值，将值拷贝，进行值传递。对象传递的话，将对象的引用（地址）拷贝，进行值传递。<br>但是地址的copy值指向同一个对象，方法对对象成员的改动，即改动了对象在内存里的值，会反映在外部。<br>然而，如果直接换引用，是换了copy的引用，和外部原来的引用并没有关系。</li>
 </ul>
 </li>
+<li><p>线程,程序,进程的基本概念</p>
+<ol>
+<li>线程<ul>
+<li>与进程相似，比进程更小的执行单位。</li>
+<li>一个进程在其执行的过程中可以产生多个线程。</li>
+<li>与进程不同，多个线程共享同一块内存空间和一组系统资源，所以系统在产生一个线程，<br>或是在各个线程之间作切换工作时，负担要比进程小得多，也正因为如此，线程也被称为轻量级进程。</li>
+</ul>
+</li>
+<li>程序<ul>
+<li>含有指令和数据的文件，被存储在磁盘或其他的数据存储设备中</li>
+<li>程序是静态的代码。</li>
+</ul>
+</li>
+<li>进程<ul>
+<li>是程序的一次执行过程，是系统运行程序的基本单位，进程是动态的。</li>
+<li>系统运行一个程序即是一个进程从创建，运行到消亡的过程。</li>
+<li>一个进程就是一个执行中的程序，它在计算机中一个指令接着一个指令地执行着，<br>每个进程还占有某些系统资源如CPU时间，内存空间，文件，文件，输入输出设备的使用权等。</li>
+<li>当程序在执行时，将会被操作系统载入内存中。</li>
+<li>线程是进程划分成的更小的运行单位。</li>
+<li>线程和进程最大的不同在于，基本上各进程是独立的，而各线程则不一定，因为同一进程中的线程极有可能会相互影响。</li>
+<li>进程属于操作系统的范畴，主要是同一段时间内，可以同时执行一个以上的程序，<br>而线程则是在同一程序内几乎同时执行一个以上的程序段。</li>
+</ul>
+</li>
 </ol>
+</li>
+<li><p>线程基本状态</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>状态名称</th>
+<th>Point</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NEW</td>
+<td>初始状态，已经构建，没有调用start()方法</td>
+</tr>
+<tr>
+<td>RUNNABLE</td>
+<td>运行状态，就绪状态(调用start()方法，但还没有run) 　+　运行中状态</td>
+</tr>
+<tr>
+<td>BLOCKED</td>
+<td>阻塞状态，阻塞于锁？</td>
+</tr>
+<tr>
+<td>WAITING</td>
+<td>等待状态，需要其他线程通知或者中断</td>
+</tr>
+<tr>
+<td>TIME_WAITING</td>
+<td>超时等待状态，指定时间自行返回</td>
+</tr>
+<tr>
+<td>TERMINATED</td>
+<td>终止线程，执行完毕</td>
+</tr>
+</tbody>
+</table>
+<ol start="24">
+<li><p>final</p>
+<ol>
+<li>变量<ul>
+<li>基本数据类型在初始化之后便不能更改</li>
+<li>引用类型初始化之后便不能再让其指向另一个对象</li>
+</ul>
+</li>
+<li>类<ul>
+<li>类不能被继承。</li>
+<li>final类中的所有成员方法都会被隐式地指定为final方法。</li>
+</ul>
+</li>
+<li>方法<ul>
+<li>方法锁定，以防任何继承类修改它的含义</li>
+<li>早期的Java实现版本中，会将final方法转为内嵌调用。<br>但是如果方法过于庞大，可能看不到内嵌调用带来的任何性能提升<br>（现在的Java版本已经不需要使用final方法进行这些优化了）。</li>
+<li>类中所有的private方法都隐式地指定为final。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>异常</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">graph TD;</span><br><span class="line">  Throwable--&gt;Error;</span><br><span class="line">  Throwable--&gt;Exception;</span><br><span class="line">  Error--&gt;VirtulMachineError;</span><br><span class="line">  Error--&gt;AWTError;</span><br><span class="line">  VirtulMachineError--&gt;StackOverFlowError;</span><br><span class="line">  VirtulMachineError--&gt;OutOfMemoryError;</span><br><span class="line">  Exception--&gt;IOException;</span><br><span class="line">  Exception--&gt;RuntimeException;</span><br><span class="line">  IOException--&gt;EOFException;</span><br><span class="line">  IOException--&gt;FileNotFoundException;</span><br><span class="line">  RuntimeException--&gt;ArrithmeticException;</span><br><span class="line">  RuntimeException--&gt;MissingResourceException;</span><br><span class="line">  RuntimeException--&gt;ClassNotFoundException;</span><br><span class="line">  RuntimeException--&gt;NullPointerException;</span><br><span class="line">  RuntimeException--&gt;IllegalArgumentException;</span><br><span class="line">  RuntimeException--&gt;ArrayIndexOutOfBoundsException;</span><br><span class="line">  RuntimeException--&gt;UnknownTypeException;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>Error（错误）<ul>
+<li>程序无法处理的错误，表示运行应用程序中较严重问题。</li>
+<li>大多数错误与代码编写者执行的操作无关，而表示代码运行时 JVM（Java 虚拟机）出现的问题。<br>例如，Java虚拟机运行错误（Virtual MachineError），当 JVM 不再有继续执行操作所需的内存资源时，<br>将出现 OutOfMemoryError。</li>
+<li>Error发生时，Java虚拟机（JVM）一般会选择线程终止。<ul>
+<li>这些错误表示故障发生于虚拟机自身、或者发生在虚拟机试图执行应用时，<br>如Java虚拟机运行错误（Virtual MachineError）、类定义错误（NoClassDefFoundError）等。</li>
+<li>错误是不可查的，因为它们在应用程序的控制和处理能力之外，而且绝大多数是程序运行时不允许出现的状况。</li>
+<li>对于设计合理的应用程序来说，即使确实发生了错误，本质上也不应该试图去处理它所引起的异常状况。</li>
+<li>在 Java中，错误通过Error的子类描述。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Exception（异常）<ul>
+<li>程序本身可以处理的异常。</li>
+<li>RuntimeException异常由Java虚拟机抛出。<br>NullPointerException（要访问的变量没有引用任何对象时，抛出该异常）,<br>ArithmeticException（算术运算异常，一个整数除以0时，抛出该异常）,<br>ArrayIndexOutOfBoundsException （下标越界异常）。</li>
+</ul>
+</li>
+</ol>
+<p><strong>异常能被程序本身可以处理，错误无法处理。</strong></p>
+<ol start="3">
+<li><p>Throwable类常用方法</p>
+<ul>
+<li>public string getMessage():返回异常发生时的详细信息</li>
+<li>public string toString():返回异常发生时的简要描述</li>
+<li>public string getLocalizedMessage():返回异常对象的本地化信息。<br>使用Throwable的子类覆盖这个方法，可以声称本地化信息。<br>如果子类没有覆盖该方法，则该方法返回的信息与getMessage（）返回的结果相同</li>
+<li>public void printStackTrace():在控制台上打印Throwable对象封装的异常信息</li>
+</ul>
+</li>
+<li><p>异常处理总结</p>
+<ul>
+<li><strong>try块：</strong> 用于捕获异常。其后可接零个或多个catch块，如果没有catch块，则必须跟一个finally块。</li>
+<li><strong>catch 块：</strong> 用于处理try捕获到的异常。</li>
+<li><p><strong>inally 块：</strong> 无论是否捕获或处理异常，finally块里的语句都会被执行。<br>当在try块或catch块中遇到return语句时，finally语句块将在方法返回之前被执行。</p>
+</li>
+<li><p><strong><em>finally块不会被执行</em></strong></p>
+<ul>
+<li>在finally语句块第一行发生了异常。 因为在其他行，finally块还是会得到执行</li>
+<li>在前面的代码中用了System.exit(int)已退出程序。 exit是带参函数 ；若该语句在异常语句之后，finally会执行</li>
+<li>程序所在的线程死亡。(后面两个在逗我咩QAQ，这不废话么)</li>
+<li>关闭CPU。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>如果try语句里有return，返回的是try语句块中变量值。</p>
+<ol>
+<li>如果有返回值，就把返回值保存到局部变量中；</li>
+<li>执行jsr指令跳到finally语句里执行；</li>
+<li>执行完finally语句后，返回之前保存在局部变量表里的值。</li>
+<li>如果try，finally语句里均有return，忽略try的return，而使用finally的return.</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>transient</p>
+<ul>
+<li>阻止实例中那些用此关键字修饰的的变量序列化；</li>
+<li>当对象被反序列化时，被transient修饰的变量值不会被持久化和恢复</li>
+<li>transient只能修饰变量，不能修饰类和方法。</li>
+</ul>
+</li>
+<li><p>console键盘输入</p>
+<ul>
+<li><p>通过 Scanner</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Scanner input = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">String s  = input.nextLine();</span><br><span class="line">input.close();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过 BufferedReader</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BufferedReader input = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span><br><span class="line">String s = input.readLine();</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>数据类型</p>
+<ol>
+<li>基本类型</li>
+</ol>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>keyWord</th>
+<th>size</th>
+<th>range</th>
+<th>default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>boolean</td>
+<td>1byte字节、8bit位</td>
+<td>true，false JVM 会在编译时期将 boolean 类型的数据转换为 int，1 true，0 false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>byte</td>
+<td>1byte字节、8bit位</td>
+<td>能存256个数，正负各128个，0放在正数一半 –&gt; -128~127</td>
+<td>0</td>
+</tr>
+<tr>
+<td>char</td>
+<td>2byte字节、16bit位</td>
+<td>能存65536个，对应Ascii码表，不需要负数，0~65535</td>
+<td>‘\u0000’</td>
+</tr>
+<tr>
+<td>short</td>
+<td>2byte字节、16bit位</td>
+<td>能存65536个数，正负各32768个,0放正数一半 –&gt; -32768~32767</td>
+<td>0</td>
+</tr>
+<tr>
+<td>int</td>
+<td>4byte字节、32bit位</td>
+<td>能存4294967296个数，正负各2147483648个,0放正数一半 –&gt; -2147483648~2147483647</td>
+<td>0</td>
+</tr>
+<tr>
+<td>long</td>
+<td>8byte字节、64bit位</td>
+<td>能存4294967296个数，正负各一半,0放正数一半 –&gt; 9223372036854775808~9223372036854775807</td>
+<td>0L</td>
+</tr>
+<tr>
+<td>float</td>
+<td>4byte字节、32bit位</td>
+<td>符号位（sign）占用1位，用来表示正负数，指数位（exponent）占用8位，用来表示指数，小数位（fraction）占用23位，用来表示小数，不足位数补0。</td>
+<td>0.0F</td>
+</tr>
+<tr>
+<td>double</td>
+<td>8byte字节、64bit位</td>
+<td>符号位（sign）占用1位，指数位（exponent）占用11位，小数位（fraction）占用52位，不足位数补0。</td>
+<td>0.0D</td>
+</tr>
+</tbody>
+</table>
 
           
         
