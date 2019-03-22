@@ -530,7 +530,7 @@
 <li>线程安全性<ul>
 <li>String final 常量线程安全</li>
 <li>StringBuilder 没有对方法加同步锁，非线程安全</li>
-<li>StringBuffer  加了同步锁，线程安全</li>
+<li>StringBuffer  加了同步锁，线程安全  ，内部使用 synchronized 进行同步</li>
 </ul>
 </li>
 <li>性能<ul>
@@ -827,70 +827,89 @@
 </li>
 <li><p>数据类型</p>
 <ol>
-<li>基本类型</li>
+<li><p>基本类型</p>
+<p>|keyWord|package|size|range|default|<br>|—|—|—|—|—|<br>|boolean|Boolean|1byte字节、8bit位|true，false JVM 会在编译时期将 boolean 类型的数据转换为 int，1 true，0 false|false|<br>|byte|Byte|1byte字节、8bit位|能存256个数，正负各128个，0放在正数一半 –&gt; -128~127|0|<br>|char|Character|2byte字节、16bit位|能存65536个，对应Ascii码表，不需要负数，0~65535|’\u0000’|<br>|short|Short|2byte字节、16bit位|能存65536个数，正负各32768个,0放正数一半 –&gt; -32768~32767|0|<br>|int|Integer|4byte字节、32bit位|能存4294967296个数，正负各2147483648个,0放正数一半 –&gt; -2147483648~2147483647|0|<br>|long|Long|8byte字节、64bit位|能存4294967296个数，正负各一半,0放正数一半 –&gt; 9223372036854775808~9223372036854775807|0L|<br>|float|Float|4byte字节、32bit位|符号位（sign）占用1位，用来表示正负数，指数位（exponent）占用8位，用来表示指数，小数位（fraction）占用23位，用来表示小数，不足位数补0。|0.0F|<br>|double|Double|8byte字节、64bit位|符号位（sign）占用1位，指数位（exponent）占用11位，小数位（fraction）占用52位，不足位数补0。|0.0D|</p>
+</li>
 </ol>
 </li>
 </ol>
-<table>
-<thead>
-<tr>
-<th>keyWord</th>
-<th>size</th>
-<th>range</th>
-<th>default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>boolean</td>
-<td>1byte字节、8bit位</td>
-<td>true，false JVM 会在编译时期将 boolean 类型的数据转换为 int，1 true，0 false</td>
-<td>false</td>
-</tr>
-<tr>
-<td>byte</td>
-<td>1byte字节、8bit位</td>
-<td>能存256个数，正负各128个，0放在正数一半 –&gt; -128~127</td>
-<td>0</td>
-</tr>
-<tr>
-<td>char</td>
-<td>2byte字节、16bit位</td>
-<td>能存65536个，对应Ascii码表，不需要负数，0~65535</td>
-<td>‘\u0000’</td>
-</tr>
-<tr>
-<td>short</td>
-<td>2byte字节、16bit位</td>
-<td>能存65536个数，正负各32768个,0放正数一半 –&gt; -32768~32767</td>
-<td>0</td>
-</tr>
-<tr>
-<td>int</td>
-<td>4byte字节、32bit位</td>
-<td>能存4294967296个数，正负各2147483648个,0放正数一半 –&gt; -2147483648~2147483647</td>
-<td>0</td>
-</tr>
-<tr>
-<td>long</td>
-<td>8byte字节、64bit位</td>
-<td>能存4294967296个数，正负各一半,0放正数一半 –&gt; 9223372036854775808~9223372036854775807</td>
-<td>0L</td>
-</tr>
-<tr>
-<td>float</td>
-<td>4byte字节、32bit位</td>
-<td>符号位（sign）占用1位，用来表示正负数，指数位（exponent）占用8位，用来表示指数，小数位（fraction）占用23位，用来表示小数，不足位数补0。</td>
-<td>0.0F</td>
-</tr>
-<tr>
-<td>double</td>
-<td>8byte字节、64bit位</td>
-<td>符号位（sign）占用1位，指数位（exponent）占用11位，小数位（fraction）占用52位，不足位数补0。</td>
-<td>0.0D</td>
-</tr>
-</tbody>
-</table>
+<pre><code>2. 包装类型
+    <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer x = <span class="number">2</span>;     <span class="comment">// 装箱</span></span><br><span class="line"><span class="keyword">int</span> y = x;         <span class="comment">// 拆箱</span></span><br></pre></td></tr></table></figure>
+
+3. 缓存池
+    - new Integer(123) 每次都会新建一个对象；
+    - Integer.valueOf(123) 会使用缓存池中的对象，多次调用会取得同一个对象的引用。
+    - 先判断值是否在缓存池中，如果在的话就直接返回缓存池的内容。
+    <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">valueOf</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">        <span class="keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Integer(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    - 自动装箱过程调用 valueOf() 方法，因此多个值相同且值在缓存池范围内的 Integer 实例使用自动装箱来创建，
+    那么就会引用相同的对象。
+    <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Integer m = <span class="number">123</span>;</span><br><span class="line">Integer n = <span class="number">123</span>;</span><br><span class="line">System.out.println(m == n); <span class="comment">// true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre><ol start="2">
+<li><p>String</p>
+<ol>
+<li>概：<ul>
+<li>final 不可被继承。</li>
+<li>Java 8 内部使用 char 数组存储数据</li>
+<li>Java 9 改用 byte 数组存储字符串，同时使用 coder 来标识使用了哪种编码。</li>
+</ul>
+</li>
+<li><p>不可变的好处</p>
+<ul>
+<li>缓存 hash 值：因为 String 的 hash 值经常被使用，例如 String 用做 HashMap 的 key。<br>不可变的特性可以使得 hash 值也不可变，因此只需要进行一次计算。</li>
+<li>String Pool 的需要： 如果一个 String 对象已经被创建过了，那么就会从 String Pool 中取得引用。<br>只有 String 是不可变的，才可能使用 String Pool。</li>
+<li>安全性：String 经常作为参数，String 不可变性可以保证参数不可变。<br>例如在作为网络连接参数的情况下如果 String 是可变的，那么在网络连接过程中，String 被改变，<br>改变 String 对象的那一方以为现在连接的是其它主机，而实际情况却不一定是。</li>
+<li>线程安全:</li>
+</ul>
+</li>
+<li><p>String Pool</p>
+<ul>
+<li>字符串常量池（String Pool）保存着所有字符串字面量（literal strings），<br>这些字面量在编译时期就确定。</li>
+<li><p>当一个字符串调用 intern() 方法时，如果 String Pool 中已经存在一个字符串和该字符串值相等<br>（使用 equals() 方法进行确定），那么就会返回 String Pool 中字符串的引用；<br>否则，就会在 String Pool 中添加一个新的字符串，并返回这个新字符串的引用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="keyword">new</span> String(<span class="string">"aaa"</span>);</span><br><span class="line">String s2 = <span class="keyword">new</span> String(<span class="string">"aaa"</span>);</span><br><span class="line">System.out.println(s1 == s2);           <span class="comment">// false</span></span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">String s4 = s1.intern();</span><br><span class="line">System.out.println(s3 == s4);           <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>采用字面量的形式创建字符串，会自动地将字符串放入 String Pool 中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String s5 = <span class="string">"bbb"</span>;</span><br><span class="line">String s6 = <span class="string">"bbb"</span>;</span><br><span class="line">System.out.println(s5 == s6);  <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在 Java 7 之前，String Pool 被放在运行时常量池中，它属于永久代。<br>而在 Java 7，String Pool 被移到堆中。<br>这是因为永久代的空间有限，在大量使用字符串的场景下会导致 OutOfMemoryError 错误。</p>
+</li>
+</ul>
+</li>
+<li><p>new String(“abc”)</p>
+<ul>
+<li>“abc” 属于字符串字面量，因此编译时期会在 String Pool 中创建一个字符串对象，指向这个 “abc” 字符串字面量</li>
+<li><p>而使用 new 的方式会在堆中创建一个字符串对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewStringTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String s = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>反编译得到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// ...</span><br><span class="line">Constant pool:</span><br><span class="line">// ...</span><br><span class="line">   #2 = Class              #18            // java/lang/String</span><br><span class="line">   #3 = String             #19            // abc</span><br><span class="line">// ...</span><br><span class="line">  #18 = Utf8               java/lang/String</span><br><span class="line">  #19 = Utf8               abc</span><br><span class="line">// ...</span><br><span class="line"></span><br><span class="line">  public static void main(java.lang.String[]);</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=3, locals=2, args_size=1</span><br><span class="line">         0: new           #2                  // class java/lang/String</span><br><span class="line">         3: dup</span><br><span class="line">         4: ldc           #3                  // String abc</span><br><span class="line">         6: invokespecial #4                  // Method java/lang/String.&quot;&lt;init&gt;&quot;:(Ljava/lang/String;)V</span><br><span class="line">         9: astore_1</span><br><span class="line">// ...</span><br></pre></td></tr></table></figure>
+<p>在 Constant Pool 中，#19 存储这字符串字面量 “abc”，<br>#3 是 String Pool 的字符串对象，它指向 #19 这个字符串字面量。<br>在 main 方法中，0: 行使用 new #2 在堆中创建一个字符串对象，<br>并且使用 ldc #3 将 String Pool 中的字符串对象作为 String 构造函数的参数。</p>
+</li>
+<li><p>String 构造函数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.value = original.value;</span><br><span class="line"><span class="keyword">this</span>.hash = original.hash;</span><br></pre></td></tr></table></figure>
+<p>将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完全复制 value 数组内容，而是都会指向同一个 value 数组。</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>运算</p>
+<ol>
+<li>参数传递 都是值传递，对象也是地址当成值传递</li>
+<li><p>float 与 double</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// float f = 1.1; //这个是把double赋值给了float，Java 不能隐式执行向下转型，因为这会使得精度降低。</span></span><br><span class="line"><span class="keyword">float</span> f = <span class="number">1.1f</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>隐式类型转换</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//字面量 1 是 int 类型，它比 short 类型精度要高，因此不能隐式地将 int 类型下转型为 short 类型。</span></span><br><span class="line"><span class="keyword">short</span> s1 = <span class="number">1</span>;</span><br><span class="line"><span class="comment">// s1 = s1 + 1;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//但是使用 += 或者 ++ 运算符可以执行隐式类型转换。</span></span><br><span class="line">s1 += <span class="number">1</span>;</span><br><span class="line"><span class="comment">// s1++;</span></span><br><span class="line"></span><br><span class="line">s1 = (<span class="keyword">short</span>) (s1 + <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>switch</p>
+<ul>
+<li>从 Java 7 开始，可以在 switch 条件判断语句中使用 String 对象。</li>
+<li>switch 不支持 long，是因为 switch 的设计初衷是对那些只有少数的几个值进行等值判断，<br>如果值过于复杂，那么还是用 if 比较合适。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
 
           
         
