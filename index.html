@@ -731,11 +731,12 @@
 </tbody>
 </table>
 <ol start="24">
-<li><p>final</p>
+<li><p><a name="final">final</a></p>
 <ol>
 <li>变量<ul>
 <li>基本数据类型在初始化之后便不能更改</li>
 <li>引用类型初始化之后便不能再让其指向另一个对象</li>
+<li>但是被引用的对象本身是可以修改的。</li>
 </ul>
 </li>
 <li>类<ul>
@@ -830,22 +831,23 @@
 <li><p>基本类型</p>
 <p>|keyWord|package|size|range|default|<br>|—|—|—|—|—|<br>|boolean|Boolean|1byte字节、8bit位|true，false JVM 会在编译时期将 boolean 类型的数据转换为 int，1 true，0 false|false|<br>|byte|Byte|1byte字节、8bit位|能存256个数，正负各128个，0放在正数一半 –&gt; -128~127|0|<br>|char|Character|2byte字节、16bit位|能存65536个，对应Ascii码表，不需要负数，0~65535|’\u0000’|<br>|short|Short|2byte字节、16bit位|能存65536个数，正负各32768个,0放正数一半 –&gt; -32768~32767|0|<br>|int|Integer|4byte字节、32bit位|能存4294967296个数，正负各2147483648个,0放正数一半 –&gt; -2147483648~2147483647|0|<br>|long|Long|8byte字节、64bit位|能存4294967296个数，正负各一半,0放正数一半 –&gt; 9223372036854775808~9223372036854775807|0L|<br>|float|Float|4byte字节、32bit位|符号位（sign）占用1位，用来表示正负数，指数位（exponent）占用8位，用来表示指数，小数位（fraction）占用23位，用来表示小数，不足位数补0。|0.0F|<br>|double|Double|8byte字节、64bit位|符号位（sign）占用1位，指数位（exponent）占用11位，小数位（fraction）占用52位，不足位数补0。|0.0D|</p>
 </li>
-</ol>
+<li><p>包装类型</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer x = <span class="number">2</span>;     <span class="comment">// 装箱</span></span><br><span class="line"><span class="keyword">int</span> y = x;         <span class="comment">// 拆箱</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>缓存池</p>
+<ul>
+<li>new Integer(123) 每次都会新建一个对象；</li>
+<li>Integer.valueOf(123) 会使用缓存池中的对象，多次调用会取得同一个对象的引用。</li>
+<li><p>先判断值是否在缓存池中，如果在的话就直接返回缓存池的内容。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">valueOf</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">        <span class="keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Integer(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>自动装箱过程调用 valueOf() 方法，因此多个值相同且值在缓存池范围内的 Integer 实例使用自动装箱来创建，<br>那么就会引用相同的对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Integer m = <span class="number">123</span>;</span><br><span class="line">Integer n = <span class="number">123</span>;</span><br><span class="line">System.out.println(m == n); <span class="comment">// true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 </li>
 </ol>
-<pre><code>2. 包装类型
-    <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer x = <span class="number">2</span>;     <span class="comment">// 装箱</span></span><br><span class="line"><span class="keyword">int</span> y = x;         <span class="comment">// 拆箱</span></span><br></pre></td></tr></table></figure>
-
-3. 缓存池
-    - new Integer(123) 每次都会新建一个对象；
-    - Integer.valueOf(123) 会使用缓存池中的对象，多次调用会取得同一个对象的引用。
-    - 先判断值是否在缓存池中，如果在的话就直接返回缓存池的内容。
-    <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">valueOf</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">        <span class="keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Integer(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-    - 自动装箱过程调用 valueOf() 方法，因此多个值相同且值在缓存池范围内的 Integer 实例使用自动装箱来创建，
-    那么就会引用相同的对象。
-    <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Integer m = <span class="number">123</span>;</span><br><span class="line">Integer n = <span class="number">123</span>;</span><br><span class="line">System.out.println(m == n); <span class="comment">// true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</code></pre><ol start="2">
+</li>
 <li><p>String</p>
 <ol>
 <li>概：<ul>
@@ -909,6 +911,260 @@
 </li>
 </ol>
 </li>
+<li><p>继承</p>
+<ol>
+<li>访问权限<ol>
+<li>private 设计良好的模块会隐藏所有的实现细节,称为信息隐藏或封装.<br>因此访问权限应当尽可能地使每个类或者成员不被外界访问。</li>
+<li>protected 在继承体系中成员对于子类可见，但是这个访问修饰符对于类没有意义。<br>子类的方法重写了父类的方法，那么子类中该方法的访问级别不允许低于父类的访问级别(里氏替换原则)</li>
+<li>public 类可见表示其它类可以用这个类创建实例对象。<br>成员可见表示其它类可以用这个类的实例对象访问到该成员；</li>
+<li>不加访问修饰符(default) 包级可见</li>
+</ol>
+</li>
+<li>抽象类与接口<ol>
+<li>抽象类<ul>
+<li>抽象类和抽象方法都使用 abstract 关键字进行声明</li>
+<li>抽象类一般会包含抽象方法，抽象方法一定位于抽象类中。</li>
+<li>抽象类不能被实例化，需要继承抽象类才能实例化其子类。</li>
+</ul>
+</li>
+<li>接口<ul>
+<li>Java 8 之前，接口可以看成是一个完全抽象的类，不能有任何的方法实现。</li>
+<li>Java 8 开始，接口可以有默认的方法实现，因为不支持默认方法的接口的维护成本太高了。<br>在 Java 8 之前，如果一个接口想要添加新的方法，那么要修改所有实现了该接口的类。</li>
+<li>接口的成员（字段 + 方法）默认都是 public 的，并且不允许定义为 private 或者 protected。</li>
+<li>接口的字段默认都是 static 和 final 的。</li>
+</ul>
+</li>
+<li>比较<ul>
+<li>从设计层面上看，抽象类提供了一种 IS-A 关系，那么就必须满足里式替换原则，<br>即子类对象必须能够替换掉所有父类对象。<br>而接口更像是一种 LIKE-A 关系，它只是提供一种方法实现契约，<br>并不要求接口和实现接口的类具有 IS-A 关系。</li>
+<li>从使用上来看，一个类可以实现多个接口，但是不能继承多个抽象类。</li>
+<li>接口的字段只能是 static 和 final 类型的，而抽象类的字段没有这种限制。</li>
+<li>接口的成员只能是 public 的，而抽象类的成员可以有多种访问权限。</li>
+</ul>
+</li>
+<li>使用选择<ol>
+<li>使用接口<ul>
+<li>需要让不相关的类都实现一个方法，<br>例如不相关的类都可以实现 Compareable 接口中的 compareTo() 方法；</li>
+<li>需要使用多重继承。</li>
+</ul>
+</li>
+<li>使用抽象类<ul>
+<li>需要在几个相关的类中共享代码。</li>
+<li>需要能控制继承来的成员的访问权限，而不是都为 public。</li>
+<li>需要继承非静态和非常量字段。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>super<ul>
+<li>访问父类的构造函数：可以使用 super() 函数访问父类的构造函数，从而委托父类完成一些初始化的工作。</li>
+<li>访问父类的成员：如果子类重写了父类的某个方法，可以通过使用 super 关键字来引用父类的方法实现。</li>
+</ul>
+</li>
+<li><p>重写与重载</p>
+<ol>
+<li>重写（Override）<ul>
+<li>继承体系中，指子类实现了一个与父类在方法声明上完全相同的一个方法。</li>
+<li>里式替换原则<ol>
+<li>子类方法的访问权限必须大于等于父类方法；</li>
+<li>子类方法的返回类型必须是父类方法返回类型或为其子类型。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>重载（Overload）</p>
+<ul>
+<li><p>存在于同一个类中，指一个方法与已经存在的方法名称上相同，但是参数类型、个数、顺序至少有一个不同。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">show</span><span class="params">(D obj)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="string">"A and D"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">show</span><span class="params">(A obj)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="string">"A and A"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">show</span><span class="params">(B obj)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="string">"B and B"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">show</span><span class="params">(A obj)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="string">"B and A"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span> <span class="keyword">extends</span> <span class="title">B</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span> <span class="keyword">extends</span> <span class="title">B</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        A a1 = <span class="keyword">new</span> A();</span><br><span class="line">        A a2 = <span class="keyword">new</span> B();</span><br><span class="line">        B b = <span class="keyword">new</span> B();</span><br><span class="line">        C c = <span class="keyword">new</span> C();</span><br><span class="line">        D d = <span class="keyword">new</span> D();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// a1为A类，b为B类，先找A类中show(B obj)，没有</span></span><br><span class="line">        <span class="comment">// 然后A类无父类，</span></span><br><span class="line">        <span class="comment">// 之后找A类中show(A obj)，因为B的父类为A，找到，显示A and A</span></span><br><span class="line">        System.out.println(a1.show(b)); <span class="comment">//A and A</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// a1为A类，c为C类，先找A类中show(C obj)，没有</span></span><br><span class="line">        <span class="comment">// 然后A类无父类，</span></span><br><span class="line">        <span class="comment">// 找A类中show(B obj)，因为C的父类是B，没有</span></span><br><span class="line">        <span class="comment">// 之后找A类中show(A obj)，因为B的父类为A，找到，显示A and A</span></span><br><span class="line">        System.out.println(a1.show(c));<span class="comment">//A and A</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// a1为A类，d为D类，先找A类中show(D obj)，找到，显示A and D</span></span><br><span class="line">        System.out.println(a1.show(d));<span class="comment">//A and D</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// a2为A类(是以B的基础new一个A，然后地址给a2，但是只有A类中方法，但是A的show(A)被子类B重写，调用这个方法就是子类)，</span></span><br><span class="line">        <span class="comment">// b为B类，先找A类中show(B obj)，没有</span></span><br><span class="line">        <span class="comment">// 然后A类无父类，</span></span><br><span class="line">        <span class="comment">// 然后，找A类中的show(B obj)，没有</span></span><br><span class="line">        <span class="comment">// 然后找A类中的show(A obj),找到，但是这个方法被B类重写了，所以调用了B类的show(A obj),所以 B and A</span></span><br><span class="line">        System.out.println(a2.show(b));<span class="comment">//B and A</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// a2为A类(是以B的基础new一个A，然后地址给a2，但是只有A类中方法，但是A的show(A)被子类B重写，调用这个方法就是子类)，</span></span><br><span class="line">        <span class="comment">// c为C类，先找A类中show(C obj)，没有</span></span><br><span class="line">        <span class="comment">// 然后A类无父类，</span></span><br><span class="line">        <span class="comment">// 然后，找A类中的show(B obj)，没有</span></span><br><span class="line">        <span class="comment">// 然后找A类中的show(A obj),找到，但是这个方法被B类重写了，所以调用了B类的show(A obj),所以 B and A</span></span><br><span class="line">        System.out.println(a2.show(c));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// a2为A类(是以B的基础new一个A，然后地址给a2，但是只有A类中方法，但是A的show(A)被子类B重写，调用这个方法就是子类)，</span></span><br><span class="line">        <span class="comment">// d为D类，先找A类中show(D obj)，有,所以 A and D</span></span><br><span class="line">        System.out.println(a2.show(d));<span class="comment">//A and D</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// b为B类，b为B类，先找B类中show(B obj)，找到，显示B and B</span></span><br><span class="line">        System.out.println(b.show(b));<span class="comment">//B and B</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// b为B类，c为C类，先找B类中show(C obj)，没有</span></span><br><span class="line">        <span class="comment">// B的父类为A，找A类中的show(C obj)，没有</span></span><br><span class="line">        <span class="comment">// 然后找B类中的show（B）找到，显示B and B</span></span><br><span class="line">        System.out.println(b.show(c));<span class="comment">//B and B</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// b为B类，d为D类，先找B类中show(D obj)，没有</span></span><br><span class="line">        <span class="comment">// B的父类为A，找A类中的show(D obj)，找到，显示A and D</span></span><br><span class="line">        System.out.println(b.show(d));<span class="comment">//A and D</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<p>涉及到重写时，方法调用的优先级为：</p>
+</li>
+<li>this.show(O)</li>
+<li>super.show(O)</li>
+<li>this.show((super)O)</li>
+<li>super.show((super)O)</li>
+</ol>
+</li>
+<li><p>Object 通用方法</p>
+<ol>
+<li><p>equals()</p>
+<ol>
+<li>等价关系<ol>
+<li>自反性</li>
+<li>对称性</li>
+<li>传递性</li>
+<li>一致性 多次调用 equals() 方法结果不变</li>
+<li>与 null 的比较<ul>
+<li>对任何不是 null 的对象 x 调用 x.equals(null) 结果都为 false</li>
+<li>对象是null在调用.equals()方法时会报空指针异常</li>
+<li>null == null 返回true</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>等价与相等<ul>
+<li>对于基本类型，== 判断两个值是否相等，基本类型没有 equals() 方法。</li>
+<li>对于引用类型，== 判断两个变量是否引用同一个对象，而 equals() 判断引用的对象是否等价。</li>
+</ul>
+</li>
+<li>实现<ul>
+<li>检查是否为同一个对象的引用，如果是直接返回 true； if (this == o) return true;</li>
+<li>传入对象是否为空，空返回false；检查是否是同一个类型，如果不是，直接返回 false；  if (o == null || getClass() != o.getClass()) return false;</li>
+<li>将 Object 对象进行转型；EqualExample that = (EqualExample) o;</li>
+<li>判断每个关键域是否相等。 判断你定义相等的每个成员变量是否相等</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>hashCode()</p>
+<ul>
+<li>hashCode() 返回散列值，而 equals() 是用来判断两个对象是否等价。<br>等价的两个对象散列值一定相同，但是散列值相同的两个对象不一定等价。</li>
+<li>在覆盖 equals() 方法时应当总是覆盖 hashCode() 方法，保证等价的两个对象散列值也相等。</li>
+<li>理想的散列函数应当具有均匀性，即不相等的对象应当均匀分布到所有可能的散列值上。<br>这就要求了散列函数要把所有域的值都考虑进来。可以将每个域都当成 R 进制的某一位，<br>然后组成一个 R 进制的整数。R 一般取 31，因为它是一个奇素数，如果是偶数的话，<br>当出现乘法溢出，信息就会丢失，因为与 2 相乘相当于向左移一位。</li>
+<li><p>一个数与 31 相乘可以转换成移位和减法：<code>31*x == (x&lt;&lt;5)-x</code>，编译器会自动进行这个优化。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">(<span class="keyword">char</span>[] chars)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> var1 = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (var1 == <span class="number">0</span> &amp;&amp; chars.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">char</span>[] var2 = chars;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> var3 = <span class="number">0</span>; var3 &lt; chars.length; ++var3) &#123;</span><br><span class="line">                var1 = <span class="number">31</span> * var1 + var2[var3];</span><br><span class="line">                <span class="comment">//var1 = (var1 &lt;&lt; 5) - var1 +var2[var3];</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">"this.hash = "</span> + var1);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> var1;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><h6 id="常见hash算法"><a href="#常见hash算法" class="headerlink" title="常见hash算法"></a>常见hash算法</h6><ol>
+<li>Object类的hashCode.返回对象的内存地址经过处理后的结构，由于每个对象的内存地址都不一样，所以哈希码也不一样。</li>
+<li>String类的hashCode.根据String类包含的字符串的内容，根据一种特殊算法返回哈希码，只要字符串内容相同，返回的哈希码也相同。</li>
+<li>Integer类，返回的哈希码就是Integer对象里所包含的那个整数的数值，<br>例如Integer i1=new Integer(100),i1.hashCode的值就是100 。由此可见，2个一样大小的Integer对象，返回的哈希码也一样。</li>
+</ol>
+<ul>
+<li>哈希码要完成这么一件事，首先要保证如果equlas出来的结果相等，那么hashCode也相等。</li>
+<li>一般的线性表，树中，记录在结构中的相对位置是随机的，即和记录的关键字之间不存在确定的关系，<br>因此，在结构中查找记录时需进行一系列和关键字的比较。这一类查找方法建立在“比较“的基础上，<br>查找的效率依赖于查找过程中所进行的比较次数。（链表最基础的比较，就是遍历比较，时间都花在了这个上）</li>
+<li>理想的情况是能直接找到需要的记录，因此必须在记录的存储位置和它的关键字之间建立一个确定的对应关系f，<br>使每个关键字和结构中一个唯一的存储位置相对应。（通过单独识别码去找到该对象，建立联系）</li>
+</ul>
+<ol start="4">
+<li>直接定址法：有一个从1到100岁的人口数字统计表，其中，年龄作为关键字，<br>哈希函数取关键字自身或者关键字的某个线性函数。取关键字自身效率不高,时间复杂度是O(1),空间复杂度是O(n),n是关键字的个数。</li>
+<li>数字分析法：重复的可能性大的不取，取的话造成冲突的机会增加，所以尽量不取可能重复的关键字。</li>
+<li>平方取中法： 取关键字平方后的中间几位为哈希地址。<br>{421，423，436}，平方之后的结果为{177241，178929，190096}，那么可以取{72，89，00}作为Hash地址。</li>
+<li>折叠法： 将关键字分割成位数相同的几部分（最后一部分的位数可以不同），<br>然后取这几部分的叠加和（舍去进位）作为哈希地址，这方法称为折叠法。<br>图书的ISBN号为8903-241-23，可以将address(key)=89+03+24+12+3作为Hash地址。</li>
+<li>除留余数法: 取关键字被某个不大于哈希表表长m的数p除后所得余数为哈希地址。H(key)=key MOD p (p&lt;=m)<br>在这里p的选取非常关键，p选择的好的话，能够最大程度地减少冲突，p一般取不大于m的最大质数。</li>
+<li>随机数法: 选择一个随机函数，取关键字的随机函数值为它的哈希地址.<br>H(key)=random(key) ,其中random为随机函数。通常用于<strong>关键字长度不等</strong>时采用此法。</li>
+</ol>
+<ul>
+<li>冲突：对不同的关键字可能得到同一哈希地址。</li>
+<li><h6 id="处理冲突方法"><a href="#处理冲突方法" class="headerlink" title="处理冲突方法"></a>处理冲突方法</h6></li>
+<li>开放定址法：当一个关键字和另一个关键字发生冲突时，使用某种探测技术在Hash表中形成一个探测序列，<br>然后沿着这个探测序列依次查找下去，当碰到一个空的单元时，则插入其中。Hi=(H(key)+di) MOD m i=1,2,…,k(k&lt;=m-1)<br>比较常用的探测方法有<strong>线性探测法</strong>，比如有一组关键字{12，13，25，23，38，34，6，84，91}，<br>Hash表长为14，Hash函数为address(key)=key%11，当插入12，13，25时可以直接插入，<br>而当插入23时，地址1被占用了，因此沿着地址1依次往下探测(探测步长可以根据情况而定)，<br>直到探测到地址4，发现为空，则将23插入其中。（发现有，则顺延偏移）<br><strong>二次探测再散列</strong>di取值可能为1,-1,2,-2,4,-4,9,-9,16,-16,…k<em>k,-k</em>k(k&lt;=m/2).<br><strong>伪随机探测再散列</strong>di取值可能为伪随机数列.</li>
+<li>链地址法：采用数组和链表相结合的办法，将Hash地址相同的记录存储在一张线性表中，<br>而每张表的表头的序号即为计算得到的Hash地址。如上述例子中，采用链地址法形成的Hash表存储。</li>
+<li>再哈希法: 当发生冲突时，使用第二个、第三个、哈希函数计算地址，直到无冲突时。缺点：计算时间增加。</li>
+<li>建立一个公共溢出区:假设哈希函数的值域为[0,m-1],则设向量HashTable[0..m-1]为基本表，<br>另外设立存储空间向量OverTable[0..v]用以存储发生冲突的记录。</li>
+</ul>
+</li>
+<li>Hash表大小的确定也非常关键，如果Hash表的空间远远大于最后实际存储的记录个数，<br>则造成了很大的空间浪费，如果选取小了的话，则容易造成冲突。<br>在实际情况中，一般需要根据最终记录存储个数和关键字的分布特点来确定Hash表的大小。<br>还有一种情况时可能事先不知道最终需要存储的记录个数，则需要动态维护Hash表的容量，<br>此时可能需要重新计算Hash地址。</li>
+</ul>
+</li>
+<li><p>这里要注意区分三个概念：hashCode值、hash值、hash方法、数组下标</p>
+<ul>
+<li>hashCode值：是KV对中的K对象的hashCode方法的返回值（若没有重写则默认用Object类的hashCode方法的生成值）<br>Object类<code>public native int hashCode();</code>native关键字是系统相关的其他语言实现（C/C++）。</li>
+<li>hash值: 是在hashCode值的基础上又进行了一步运算后的结果，这个运算过程就是<em>hash方法</em>。</li>
+<li>数组下标: 根据该hash值和数组长度计算出数组下标，计算公式：hash值  &amp;（数组长度-1）= 下标。</li>
+<li>HashMap中<em>hash方法</em>：  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object var0)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> var1;</span><br><span class="line">    <span class="keyword">return</span> var0 == <span class="keyword">null</span> ? <span class="number">0</span> : (var1 = var0.hashCode()) ^ var1 &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>toString()</p>
+<ul>
+<li>Object默认实现<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.getClass().getName() + <span class="string">"@"</span> + Integer.toHexString(<span class="keyword">this</span>.hashCode());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>clone()</p>
+<ol>
+<li>cloneable</li>
+</ol>
+<ul>
+<li><p>clone() 是 Object 的 protected 方法，它不是 public，一个类不显式去重写 clone()，<br>其它类就不能直接去调用该类实例的 clone() 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CloneExample</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> b;</span><br><span class="line">&#125;</span><br><span class="line">CloneExample e1 = <span class="keyword">new</span> CloneExample();</span><br><span class="line"><span class="comment">// CloneExample e2 = e1.clone(); // 'clone()' has protected access in 'java.lang.Object'</span></span><br></pre></td></tr></table></figure>
+<p>重写 clone() 得到以下实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class CloneExample &#123;</span><br><span class="line">    private int a;</span><br><span class="line">    private int b;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public CloneExample clone() throws CloneNotSupportedException &#123;</span><br><span class="line">        return (CloneExample)super.clone();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CloneExample e1 = <span class="keyword">new</span> CloneExample();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    CloneExample e2 = e1.clone();</span><br><span class="line">&#125; <span class="keyword">catch</span> (CloneNotSupportedException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.lang.CloneNotSupportedException: CloneExample</span><br></pre></td></tr></table></figure>
+<p>上抛出了 CloneNotSupportedException，这是因为 CloneExample 没有实现 Cloneable 接口。</p>
+</li>
+<li>clone() 方法并不是 Cloneable 接口的方法，而是 Object 的一个 protected 方法。<br>Cloneable 接口只是规定，如果一个类没有实现 Cloneable 接口又调用了 clone() 方法，<br>就会抛出 CloneNotSupportedException。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CloneExample</span> <span class="keyword">implements</span> <span class="title">Cloneable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> b;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.clone();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol start="2">
+<li>浅拷贝<ul>
+<li>拷贝对象和原始对象的引用类型引用同一个对象。</li>
+</ul>
+</li>
+<li><p>深拷贝</p>
+<ul>
+<li>拷贝对象和原始对象的引用类型引用不同对象。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> DeepCloneExample <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">    DeepCloneExample result = (DeepCloneExample) <span class="keyword">super</span>.clone();</span><br><span class="line">    result.arr = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">        result.arr[i] = arr[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>clone() 的替代方案</p>
+<ul>
+<li>使用 clone() 方法来拷贝一个对象即复杂又有风险，它会抛出异常，并且还需要类型转换。<br>Effective Java 书上讲到，最好不要去使用 clone()</li>
+<li>可以使用拷贝构造函数</li>
+<li>拷贝工厂来拷贝一个对象。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>关键字<ol>
+<li><a href="#final">final</a></li>
+<li>static<ol>
+<li>静态变量：又称为类变量，也就是说这个变量属于类的，类所有的实例都共享静态变量，<br>可以直接通过类名来访问它。静态变量在内存中只存在一份。</li>
+</ol>
+<ul>
+<li>实例变量：每创建一个实例就会产生一个实例变量，它与该实例同生共死。</li>
+</ul>
+<ol start="2">
+<li>静态方法：</li>
+</ol>
+<ul>
+<li>静态方法在类加载的时候就存在了，它不依赖于任何实例。<br>所以静态方法必须有实现，也就是说它<strong>不能是抽象方法</strong>。</li>
+<li>只能访问所属类的静态字段和静态方法，方法中不能有 this 和 super 关键字。</li>
+</ul>
+<ol start="3">
+<li>静态语句块：</li>
+</ol>
+<ul>
+<li>静态语句块在类初始化时运行一次。</li>
+</ul>
+<ol start="4">
+<li>静态内部类:</li>
+</ol>
+<ul>
+<li>非静态内部类依赖于外部类的实例，而静态内部类不需要。</li>
+<li>静态内部类不能访问外部类的非静态的变量和方法。</li>
+</ul>
+<ol start="5">
+<li>静态导包:</li>
+</ol>
+<ul>
+<li>在使用静态变量和方法时不用再指明 ClassName，从而简化代码，但可读性大大降低。<br><code>import static com.xxx.ClassName.*</code></li>
+</ul>
+<ol start="6">
+<li>初始化顺序</li>
+</ol>
+<ul>
+<li>静态变量和静态语句块优先于实例变量和普通语句块，静态变量和静态语句块的初始化顺序取决于它们在代码中的顺序。</li>
+<li>存在继承的情况下，初始化顺序为：<ol>
+<li>父类（静态变量、静态语句块）</li>
+<li>子类（静态变量、静态语句块）</li>
+<li>父类（实例变量、普通语句块）</li>
+<li>父类（构造函数）</li>
+<li>子类（实例变量、普通语句块）</li>
+<li>子类（构造函数）</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>反射</li>
 </ol>
 
           
