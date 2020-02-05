@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="原文链接：http://literatejava.com/exceptions/checked-exceptions-javas-biggest-mistake/  可检查异常一直以来都是java语言中备受争议一个特性。 拥趸者宣称可检查异常能保证程序能在在运行中检查出异常，并且从程序异常中恢复。反对者却说即便“catch”代码块存在，但程序几乎不可能从异常中恢复，而且成为一个经常出错的点。更加之">
+<meta name="keywords" content="java,翻译,异常">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[翻译]可检查异常：Java最大的错误">
+<meta property="og:url" content="http://yoursite.com/2019/09/26/翻译-可检查异常：Java最大的错误/index.html">
+<meta property="og:site_name" content="华氏温度">
+<meta property="og:description" content="原文链接：http://literatejava.com/exceptions/checked-exceptions-javas-biggest-mistake/  可检查异常一直以来都是java语言中备受争议一个特性。 拥趸者宣称可检查异常能保证程序能在在运行中检查出异常，并且从程序异常中恢复。反对者却说即便“catch”代码块存在，但程序几乎不可能从异常中恢复，而且成为一个经常出错的点。更加之">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-09-27T16:27:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[翻译]可检查异常：Java最大的错误">
+<meta name="twitter:description" content="原文链接：http://literatejava.com/exceptions/checked-exceptions-javas-biggest-mistake/  可检查异常一直以来都是java语言中备受争议一个特性。 拥趸者宣称可检查异常能保证程序能在在运行中检查出异常，并且从程序异常中恢复。反对者却说即便“catch”代码块存在，但程序几乎不可能从异常中恢复，而且成为一个经常出错的点。更加之">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/26/翻译-可检查异常：Java最大的错误/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>[翻译]可检查异常：Java最大的错误 | 华氏温度</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">华氏温度</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Startseite</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />Über</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Kategorien</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archiv</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/26/翻译-可检查异常：Java最大的错误/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Howard">
+      <meta itemprop="description" content="午夜向日葵，晌午夜光杯。跛者脚下路，屠夫腕上佛。">
+      <meta itemprop="image" content="/images/avatar/P1070776.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="华氏温度">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">[翻译]可检查异常：Java最大的错误
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+
+              
+                
+              
+
+              <time title="Post created: 2019-09-26 00:02:02" itemprop="dateCreated datePublished" datetime="2019-09-26T00:02:02+08:00">2019-09-26</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Updated at: 2019-09-28 00:27:32" itemprop="dateModified" datetime="2019-09-28T00:27:32+08:00">2019-09-28</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/09/26/翻译-可检查异常：Java最大的错误/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/09/26/翻译-可检查异常：Java最大的错误/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote><p>原文链接：<a href="http://literatejava.com/exceptions/checked-exceptions-javas-biggest-mistake/" target="_blank" rel="noopener">http://literatejava.com/exceptions/checked-exceptions-javas-biggest-mistake/</a></p>
+</blockquote>
+<p>可检查异常一直以来都是java语言中备受争议一个特性。</p>
+<p>拥趸者宣称可检查异常能保证程序能在在运行中检查出异常，并且从程序异常中恢复。<br>反对者却说即便“catch”代码块存在，但程序几乎不可能从异常中恢复，而且成为一个经常出错的点。<br>更加之Java 8之后，新增了lambdas表达式的特性，是不是可检查异常在java世界中正变成一个鸡肋的特性？</p>
+<h3 id="java设置可检查异常特性的初衷"><a href="#java设置可检查异常特性的初衷" class="headerlink" title="java设置可检查异常特性的初衷"></a>java设置可检查异常特性的初衷</h3><p>90年代中期，James Gosling在Sun公司提出了一种新的语言。当时，在c++编程中要求每个函数的返回都要检查错误。他认为必须有一个更好的解决方案，<br>就在这种新的Java语言中创建了异常的概念。</p>
+<p>可检查异常的本来目的是为了做本地标记并强制开发者去处理的可能发生的异常。可检查异常必须在方法声明时标注（方法后throw），否则必须在代码里去处理（try-catch）。<br>设计这种模式的目的是为了增强软件的可靠性和恢复性。期望从除了成功之外的其他可预见意外结果中“恢复”程序的运行，比如在尝试付款时抛出资金不足（InsufficientFundsException）<br>的可检查异常。至于需要做哪些操作让程序“恢复”，就很难去搞清楚了。（因为你付款失败，所以我catch里给你账户上补钱，让你付款成果？虽然你长得丑，但是你想得美。）</p>
+<p>运行时异常也包括在java中。因为空指针异常NPE，数据错误或者非法状态、非法访问这些错误可能在代码运行过程中的某些地方产生，所以他们都是运行时异常的子类。</p>
+<p>运行时异常不需要声明就可以在任何地方抛出，比起可检查异常更方便。但是运行时异常可以代替可检查异常吗？</p>
+<h3 id="弊端"><a href="#弊端" class="headerlink" title="弊端"></a>弊端</h3><p>这里的关键点在于，运行时异常和可检查异常在功能上是等价的。区别在于运行时异常不能处理或者从异常中恢复而可检查异常可以。</p>
+<p>对可检查异常最大的争议点在于，大多数异常都无法恢复的。简单来说，我们并没有发生异常的子系统代码。我们看不到子系统的具体实现，所以我们并不能对它负责，<br>更无法修复它。</p>
+<p>在JDBC (SQLException)和EJB中的RMI (RemoteException)中体现的最为突出。与按照最初可检查异常设计的明确可修复的意外情况不同，<br>这些强制的普遍的系统可靠性问题事实上时并不能被修复的异常，被到处声明。（java代码里一堆没有的catch，有些问题catch下来你也没辙，但是不catch编译都不能通过）</p>
+<p>对于任何一个方法来说，它可能出现的异常包括它调用的所有子方法可能发生的异常。在一个方法上声明这么多可能存在的异常，<br>让开发者去看这些通过调用树传上来的异常，已经不能提供一个明确的本方法相关的重点给开发者了。</p>
+<p>大多数EJB开发人员都经历过这种声明的异常，在方法相关的每一层或者整个代码库中都必须声明。（尤其底层）调用一个抛出不同异常的方法，需要修改大量于其相关的方法。</p>
+<p>许多开发人员被告知尽量捕获低级异常，并将它们作为高级(应用级)可检查异常重新抛出。这样做需要每个项目多出2000个以上没有任何功能性的catch-throw”代码块。</p>
+<p>这样就导致生吞异常、隐藏异常原因、重复打印日志和返回未初始化数据或者返回空指针变得很普遍。大多数项目可能会出现600+的上述编码错误或完全错误的用法。</p>
+<p>最终，开发者反对代码中出现大量的已经变成许多错误源头的catch代码块。</p>
+<h3 id="可检查异常-与函数式编程不兼容"><a href="#可检查异常-与函数式编程不兼容" class="headerlink" title="可检查异常 - 与函数式编程不兼容"></a>可检查异常 - 与函数式编程不兼容</h3><p>然后我们迎来了Java 8，它提供了新的函数式编程特性，比如lambdas表达式、Streams流和组合函数。</p>
+<p>这些特性建立在泛型的基础上，参数和返回类型被泛型化，因此迭代操作和流操作(forEach、map、flatMap)可以通过共同的操作实现，而不用管对象类型时什么。</p>
+<p>但是，与数据类型不同，声明的异常不能泛型化。</p>
+<p>在Java中不能提供一个用lambda声明某个可检查的异常流操作(例如stream .map)，并显式的将该可检查异常传递给上下文代码。</p>
+<p>对可检查异常来所最重要的一点在于，所有介于一个throw和接收catch中间的代码块被强制要求声明异常。</p>
+<p>这个问题通过将可检查异常“包装”在RuntimeException运行时异常中解决，隐藏了异常的原始类型，通过对具体的异常“catch”代码块渲染包装来应对原生的异常概念，<br>使之失效。</p>
+<p>Finally we can capture Java’s new philosophy in a nutshell, by noting that none of the new “functional interfaces”<br>in Java 8 declare checked exceptions.<br>最后，通过注意到Java 8中没有一个新的函数式接口（“functional interfaces”）声明可检查异常这个特点，我们可以简单的抓住Java新哲学的核心<br>（新核心是什么？简洁简洁简洁！java设计者终于意识到这个问题了。避免可检查异常引出的大段catch无用代码。）ji’shi</p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>与早期语言相比，Java中的异常机制主要带来了可靠性和严谨的错误处理方面的优势。Java保证了提供可靠的服务和商业软件，但c++永远不可能做到这一点。</p>
+<p>可检查异常最初的设计意图是处理意外事件而不是程序错误。值得称道的目的是重点突出了明确可预测的错误点(无法连接、找不到文件等)，并确保开发人员必须处理这些问题。</p>
+<p>但强制声明大量的系统错误和不可恢复的故障却从未包含的在最初的设计概念里。这些被声明为可检查异常的错误是不可能被修正的。</p>
+<p>通常在代码中和EJB应用或者web应用、Swing、AWT容器应用中可能出现故障，已经通过提供一个最外层的请求失败（“failed request”）异常处理机制来解决这个异常。应该采取最基本的正确策略是回滚事务并返回错误信息。</p>
+<p><strong><em>运行时异常接受任何可检查异常可能存在的异常处理操作，但要避免限制性编码约束。</em></strong> 这种机制简化了编码，异常在最外层或者尽可能高的层级去处理的这使得编码工作更容易遵循早期抛出、晚期捕获的最佳实践。</p>
+<p>一些领先的Java框架和有影响力的代码实践，现在已经明确地移除了可检查异常机制的使用。Spring、Hibernate和现代Java框架开发商只使用运行时异常，运行时异常的便利性是它大受欢迎的主要因素。</p>
+<p>知名java大牛Josh Bloch (Java Collections framework研发者)、Rod Johnson、Anders Hejlsberg (c#之父)、Gavin King和Stephen Colebourn (JodaTime研发者)都可检查异常的使用。</p>
+<p>现在，在Java 8中，lambdas是向前迈出的基本一步。这些语言特性使得控制流从内部的函数式操作中抽象出来。正如我们已经看到的，这些新特性使得可检查异常，包括它的声明和异常处理机制的立刻显得过时了。</p>
+<p>对于开发人员来说，注意代码的可靠性和预先诊断代码可能的出现故障的点(或意外时间事件)是很重要的，例如打开文件、连接数据库等操作。如果我们能在这方面提供一个良好实现的错误信息，我们可能达到软件工程师成就的顶峰——开发有自我诊断能力的软件。</p>
+<p>但是，我们应该使用不可检查异常（RuntimeException）来实现这种目的。如果这个异常必须重新抛出，应该坚持使用RuntimeException或者应用特定的异常子类。</p>
+<p>正如Stephen Colebourn所说，如果你的项目仍然在使用或提倡可检查异常，那么你的java技能已经过时5-10年了。Java已经有了长足的进步。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/qrcode_for_gh.jpg" alt="Howard wechat" style="width: 200px; max-width: 100%;"/>
+    <div>扫一下，看公众号刺激到随时怀孕~</div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>大爷，真是福寿延绵~再来玩~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/reward/wechat.png" alt="Howard WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/reward/alipay.jpg" alt="Howard Alipay"/>
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/翻译/" rel="tag"># 翻译</a>
+          
+            <a href="/tags/异常/" rel="tag"># 异常</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/14/java-base-point-and-think/" rel="next" title="java base point and think">
+                <i class="fa fa-chevron-left"></i> java base point and think
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/07/spring-boot搭建问题全记录/" rel="prev" title="spring boot搭建问题全记录">
+                spring boot搭建问题全记录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar/P1070776.jpg"
+                alt="Howard" />
+            
+              <p class="site-author-name" itemprop="name">Howard</p>
+              <p class="site-description motion-element" itemprop="description">午夜向日葵，晌午夜光杯。跛者脚下路，屠夫腕上佛。</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">Artikel</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">Kategorien</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-name">Tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/hizzyishome" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:hizzyzzh@hotmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://mi.com/" title="MI" target="_blank">MI</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#java设置可检查异常特性的初衷"><span class="nav-number">1.</span> <span class="nav-text">java设置可检查异常特性的初衷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#弊端"><span class="nav-number">2.</span> <span class="nav-text">弊端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可检查异常-与函数式编程不兼容"><span class="nav-number">3.</span> <span class="nav-text">可检查异常 - 与函数式编程不兼容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结论"><span class="nav-number">4.</span> <span class="nav-text">结论</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Howard</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Gemini</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+
+
+
+  
+  
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2019/09/26/翻译-可检查异常：Java最大的错误/';
+        this.page.identifier = '2019/09/26/翻译-可检查异常：Java最大的错误/';
+        this.page.title = '[翻译]可检查异常：Java最大的错误';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        $(function () {
+          var offsetTop = $('#comments').offset().top - $(window).height();
+          if (offsetTop <= 0) {
+            // load directly when there's no a scrollbar
+            loadComments();
+          } else {
+            $(window).on('scroll.disqus_scroll', function () {
+              var scrollTop = document.documentElement.scrollTop;
+              if (scrollTop >= offsetTop) {
+                $(window).off('.disqus_scroll');
+                loadComments();
+              }
+            });
+          }
+        });
+      
+    </script>
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
