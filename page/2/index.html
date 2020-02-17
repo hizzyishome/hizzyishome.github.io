@@ -304,6 +304,377 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/21/初始的springboot项目的依赖分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Howard">
+      <meta itemprop="description" content="午夜向日葵，晌午夜光杯。跛者脚下路，屠夫腕上佛。">
+      <meta itemprop="image" content="/images/avatar/P1070776.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="华氏温度">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/21/初始的springboot项目的依赖分析/" itemprop="url">
+                  初始的springboot项目的依赖分析
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+
+              
+                
+              
+
+              <time title="Post created: 2019-01-21 17:41:03" itemprop="dateCreated datePublished" datetime="2019-01-21T17:41:03+08:00">2019-01-21</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/springboot/" itemprop="url" rel="index"><span itemprop="name">springboot</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/21/初始的springboot项目的依赖分析/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/21/初始的springboot项目的依赖分析/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="依赖分析"><a href="#依赖分析" class="headerlink" title="依赖分析"></a>依赖分析</h3><p>springboot项目从官网指引的步骤生成的项目，执行<code>mvn dependency:tree</code>，输出如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">com.XXX:demo:jar:0.0.1-SNAPSHOT</span><br><span class="line">+- org.springframework.boot:spring-boot-starter:jar:2.1.2.RELEASE:compile</span><br><span class="line">|  +- org.springframework.boot:spring-boot:jar:2.1.2.RELEASE:compile</span><br><span class="line">|  |  \- org.springframework:spring-context:jar:5.1.4.RELEASE:compile</span><br><span class="line">|  |     +- org.springframework:spring-aop:jar:5.1.4.RELEASE:compile</span><br><span class="line">|  |     +- org.springframework:spring-beans:jar:5.1.4.RELEASE:compile</span><br><span class="line">|  |     \- org.springframework:spring-expression:jar:5.1.4.RELEASE:compile</span><br><span class="line">|  +- org.springframework.boot:spring-boot-autoconfigure:jar:2.1.2.RELEASE:compile</span><br><span class="line">|  +- org.springframework.boot:spring-boot-starter-logging:jar:2.1.2.RELEASE:compile</span><br><span class="line">|  |  +- ch.qos.logback:logback-classic:jar:1.2.3:compile</span><br><span class="line">|  |  |  \- ch.qos.logback:logback-core:jar:1.2.3:compile</span><br><span class="line">|  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.11.1:compile</span><br><span class="line">|  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.11.1:compile</span><br><span class="line">|  |  \- org.slf4j:jul-to-slf4j:jar:1.7.25:compile</span><br><span class="line">|  +- javax.annotation:javax.annotation-api:jar:1.3.2:compile</span><br><span class="line">|  +- org.springframework:spring-core:jar:5.1.4.RELEASE:compile</span><br><span class="line">|  |  \- org.springframework:spring-jcl:jar:5.1.4.RELEASE:compile</span><br><span class="line">|  \- org.yaml:snakeyaml:jar:1.23:runtime</span><br><span class="line">\- org.springframework.boot:spring-boot-starter-test:jar:2.1.2.RELEASE:<span class="built_in">test</span></span><br><span class="line">   +- org.springframework.boot:spring-boot-test:jar:2.1.2.RELEASE:<span class="built_in">test</span></span><br><span class="line">   +- org.springframework.boot:spring-boot-test-autoconfigure:jar:2.1.2.RELEASE:<span class="built_in">test</span></span><br><span class="line">   +- com.jayway.jsonpath:json-path:jar:2.4.0:<span class="built_in">test</span></span><br><span class="line">   |  +- net.minidev:json-smart:jar:2.3:<span class="built_in">test</span></span><br><span class="line">   |  |  \- net.minidev:accessors-smart:jar:1.2:<span class="built_in">test</span></span><br><span class="line">   |  |     \- org.ow2.asm:asm:jar:5.0.4:<span class="built_in">test</span></span><br><span class="line">   |  \- org.slf4j:slf4j-api:jar:1.7.25:compile</span><br><span class="line">   +- junit:junit:jar:4.12:<span class="built_in">test</span></span><br><span class="line">   +- org.assertj:assertj-core:jar:3.11.1:<span class="built_in">test</span></span><br><span class="line">   +- org.mockito:mockito-core:jar:2.23.4:<span class="built_in">test</span></span><br><span class="line">   |  +- net.bytebuddy:byte-buddy:jar:1.9.7:<span class="built_in">test</span></span><br><span class="line">   |  +- net.bytebuddy:byte-buddy-agent:jar:1.9.7:<span class="built_in">test</span></span><br><span class="line">   |  \- org.objenesis:objenesis:jar:2.6:<span class="built_in">test</span></span><br><span class="line">   +- org.hamcrest:hamcrest-core:jar:1.3:<span class="built_in">test</span></span><br><span class="line">   +- org.hamcrest:hamcrest-library:jar:1.3:<span class="built_in">test</span></span><br><span class="line">   +- org.skyscreamer:jsonassert:jar:1.5.0:<span class="built_in">test</span></span><br><span class="line">   |  \- com.vaadin.external.google:android-json:jar:0.0.20131108.vaadin1:<span class="built_in">test</span></span><br><span class="line">   +- org.springframework:spring-test:jar:5.1.4.RELEASE:<span class="built_in">test</span></span><br><span class="line">   \- org.xmlunit:xmlunit-core:jar:2.6.2:<span class="built_in">test</span></span><br></pre></td></tr></table></figure></p>
+<p>这个直观一点：<br><img src="/2019/01/21/初始的springboot项目的依赖分析/demo.png" alt="LinkedList"></p>
+<p>###</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/21/干炒springboot心得/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Howard">
+      <meta itemprop="description" content="午夜向日葵，晌午夜光杯。跛者脚下路，屠夫腕上佛。">
+      <meta itemprop="image" content="/images/avatar/P1070776.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="华氏温度">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/21/干炒springboot心得/" itemprop="url">
+                  当一只活的springboot报错Cannot load driver class: com.mysql.jdbc.Driver时
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+
+              
+                
+              
+
+              <time title="Post created: 2018-12-21 15:27:51" itemprop="dateCreated datePublished" datetime="2018-12-21T15:27:51+08:00">2018-12-21</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/干炒springboot心得/" itemprop="url" rel="index"><span itemprop="name">干炒springboot心得</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/21/干炒springboot心得/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/21/干炒springboot心得/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>文明人遇到了莫名其妙的错误时，不能骂娘，要和蔼可亲的问候各种组件的祖宗。<br>——《华哗哗的代码修炼之道》</p>
+</blockquote>
+<p>  其实之前接触过一些springboot的东西了，只是这些打算自己搭一次，当一个以后的种子项目。<br>  结果第一步就踏进了坑里，里面都是钉鸡，鸡儿冲上=。=</p>
+<p>  怎么开始我就不赘述了，网上有挺多挺好的引导。总之要是你启动时，报错如下：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.beans.factory.UnsatisfiedDependencyException:</span><br><span class="line">Error creating bean with name &apos;org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaConfiguration&apos;:</span><br><span class="line">Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException:</span><br><span class="line">Error creating bean with name &apos;dataSource&apos; defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class]:</span><br><span class="line">Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException:</span><br><span class="line">Failed to instantiate [com.zaxxer.hikari.HikariDataSource]: Factory method &apos;dataSource&apos; threw exception; nested exception is java.lang.IllegalStateException:</span><br><span class="line">Cannot load driver class: com.mysql.jdbc.Driver</span><br></pre></td></tr></table></figure>
+<p>  首先，如果<code>pom.xml</code> 文件不引用<code>spring-boot-starter-jdbc</code>的话，<br>  只有<code>spring-boot-starter-web</code>是不会报错的，因为不涉及数据链接。<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-jdbc&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
+<p>  但是加上后，springboot默认你是需要数据链接的，在<code>src/main/resources/application.properties</code><br>  中就需要添加<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">spring.datasource.url=jdbc:mysql://localhost:3306/test</span><br><span class="line">spring.datasource.username=dbuser</span><br><span class="line">spring.datasource.password=dbpass</span><br><span class="line">spring.datasource.driver-class-name=com.mysql.jdbc.Driver</span><br></pre></td></tr></table></figure></p>
+<p>  添加了还是报错的话，你就继续看下去吧。</p>
+<p>  爆栈上最多的vote回答都是：</p>
+<blockquote>
+<p>Looks like the initial problem is with the auto-config.<br>  If you don’t need the datasource, simply remove it from the<br>  auto-config process:<br>  <code>@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})</code></p>
+</blockquote>
+<p>  如果到此你在启动类上加了这个注解，你就满意的话，出门右拐不送。</p>
+<p>  但是我，真的是要用DB的啊～</p>
+<p>  来，按部就班的把这只活的springBoot，放在案板上，裹上面包糠，炸至金黄～算了，看排查不走吧，这个货一看就不好吃</p>
+<ol>
+<li><code>pom.xml</code> 文件引用了正确了没？</li>
+</ol>
+<ul>
+<li>需要一个带有jdbc驱动的依赖引入，比如<code>mysql-connector-java</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;5.1.46&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol start="2">
+<li><code>application.properties</code>文件的空格问题</li>
+</ol>
+<ul>
+<li>看看你各个配置有没有多余的空格</li>
+<li>尤其<code>spring.datasource.driver-class-name=com.mysql.jdbc.Driver</code>后面有没有</li>
+</ul>
+<ol start="3">
+<li>你要知道你的项目是基于maven构建的，maven这个东西你懂得，是不是也会抽风。</li>
+</ol>
+<ul>
+<li>看看你的<code>.m2</code>文件夹里面有没有mysql的相关包</li>
+<li>没有就clean 然后reimport</li>
+<li>保证路径下真的能找到</li>
+</ul>
+<h5 id="我就是3-的问题，别忽略了你整个的环境，这才是最要命的，让我们山呼万岁"><a href="#我就是3-的问题，别忽略了你整个的环境，这才是最要命的，让我们山呼万岁" class="headerlink" title="我就是3.的问题，别忽略了你整个的环境，这才是最要命的，让我们山呼万岁"></a>我就是3.的问题，别忽略了你整个的环境，这才是最要命的，让我们山呼万岁</h5><h5 id="等待AI代替程序员编码的日子到来，我就能归园田居去种地了。"><a href="#等待AI代替程序员编码的日子到来，我就能归园田居去种地了。" class="headerlink" title="等待AI代替程序员编码的日子到来，我就能归园田居去种地了。"></a>等待AI代替程序员编码的日子到来，我就能归园田居去种地了。</h5>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/18/手撕链表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -891,6 +1262,62 @@
 <li>byte、short、int、long、float 以及 double 的值域依次扩大，而且前面的值域被后面的值域所包含。<br>从前面的基本类型转换至后面的基本类型，无需强制转换。尽管他们的默认值看起来不一样，但在内存中都是 0。</li>
 <li>在这些基本类型中，boolean 和 char 是唯二的无符号类型。在不考虑违反规范的情况下，boolean 类型的取值范围是 0 或者 1。<br>char 类型的取值范围则是 [0, 65535]。通常我们可以认定 char 类型的值为非负数。这种特性十分有用，比如说作为数组索引等。</li>
 </ul>
+<h2 id="Java对象的内存布局"><a href="#Java对象的内存布局" class="headerlink" title="Java对象的内存布局"></a>Java对象的内存布局</h2><ol start="0">
+<li>HotSpot虚拟机中，对象在内存中存储的布局可以分为3块区域：对象头（Header）、实例数据（Instance Data）和对齐填充（Padding）。</li>
+<li>对象头（Header）包括两部分信息:<ul>
+<li>“Mark Word”,标记字段,标记信息:存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳</li>
+<li>类型指针:确定这个对象是哪个类的实例,不是所有的虚拟机实现都必须在对象数据上保留类型指针.，如果对象是一个Java数组，<br>那在对象头中还必须有一块用于记录数组长度的数据，因为虚拟机可以通过普通Java对象的元数据信息确定Java对象的大小，<br>但是从数组的元数据中却无法确定数组的大小。</li>
+</ul>
+</li>
+<li>实例数据（Instance Data）:对象真正存储的有效信息，也是在程序代码中所定义的各种类型的字段内容。无论是从父类继承下来的，<br>还是在子类中定义的，都需要记录起来。</li>
+<li>对齐填充并不是必然存在的，也没有特别的含义，它仅仅起着占位符的作用。由于HotSpot VM的自动内存管理系统要求对象起始地址必须是8字节的整数倍<br>,换句话说，就是对象的大小必须是8字节的整数倍。</li>
+<li>通过 new 指令新建出来的对象，由于都隐式或者显式的调用了父类,直到Object的构造方法,所以其实它的内存其实涵盖了所有父类中的实例字段。<br>也就是说，虽然子类无法访问父类的私有实例字段，或者子类的实例字段隐藏了父类的同名实例字段，但是子类的实例还是会为这些父类实例字段分配内存的。</li>
+<li>压缩指针<ol>
+<li>概述<ul>
+<li>Java 虚拟机中，每个 Java 对象都有一个对象头（object header）,由标记字段和类型指针所构成.</li>
+<li>标记字段:64位,8字节.用以存储 Java 虚拟机有关该对象的运行数据:哈希码、GC 信息以及锁信息</li>
+<li>类型指针:64位,8字节.指向该对象的类</li>
+<li>在 64 位的 Java 虚拟机中，对象头的标记字段占 64 位，而类型指针又占了 64 位。每一个 Java 对象在内存中的<strong>额外开销</strong>就是 16 个字节。</li>
+<li>64 位 Java 虚拟机引入了压缩指针的概念-XX:+UseCompressedOops，默认开启.将堆中原本 64 位的 Java 对象指针压缩成 32 位的。</li>
+<li>类型指针64 –&gt; 32, 减少了32字节,4字节.所以对象头从16字节,减少为12字节.</li>
+<li>压缩指针作用于<em>对象头的类型指针</em>，<em>引用类型的字段</em>，以及<em>引用类型数组</em>。</li>
+</ul>
+</li>
+<li>原理<ul>
+<li>32位的压缩指针,可以标记2的32次方个对象,如果一个对象占据2位,对应内存空间需要2的33次方.</li>
+<li>但是对象大小各有不同,不可能都是一样大小,所以需要定长的扩展单位.<strong><em>内存对齐</em></strong>.对应虚拟机选项 -XX:ObjectAlignmentInBytes，默认值为 8</li>
+<li>默认情况下，Java 虚拟机堆中对象的起始地址需要对齐至 8 的倍数</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>内存对齐<ul>
+<li>对应虚拟机选项 -XX:ObjectAlignmentInBytes，默认值为 8</li>
+<li>默认情况下，Java 虚拟机堆中对象的起始地址需要对齐至 8 的倍数</li>
+<li>如果一个对象用不到 8N 个字节，那么空白的那部分空间就浪费掉了。这些浪费掉的空间我们称之为<strong>对象间的填充（padding）</strong>。</li>
+<li>所以在默认情况下，Java 虚拟机中的 32 位压缩可以寻址到 2 的 35 次方个字节(2^32*2^3)，也就是 32GB 的地址空间（超过 32GB 则会关闭压缩指针）。</li>
+<li>对压缩指针解引用时，我们需要将其左移 3 位(就是乘以8恢复真实地址)，再加上一个固定偏移量，便可以得到能够寻址 32GB 地址空间的<br>伪 64 位指针了。</li>
+<li>我们可以通过配置刚刚提到的内存对齐选项（-XX:ObjectAlignmentInBytes）来进一步提升寻址范围。比如16.寻址到2^36地址空间</li>
+<li>但是可能增加对象间填充，导致压缩指针没有达到原本节省空间的效果。</li>
+<li><strong>内存对齐不仅存在于对象与对象之间，也存在于对象中的字段之间。</strong>:Java 虚拟机要求 long 字段、double 字段，<br>以及非压缩指针状态下的引用字段地址为 8 的倍数。</li>
+<li>字段内存对齐的其中一个原因，是让字段只出现在同一 CPU 的缓存行中。如果字段不是对齐的，那么就有可能出现跨缓存行的字段。<br>也就是说，该字段的读取可能需要替换两个缓存行，而该字段的存储也会同时污染两个缓存行。<br>这两种情况对程序的执行效率而言都是不利的。为了处理这种情况,采用<strong>字段重排列</strong></li>
+</ul>
+</li>
+<li>字段重排列<ul>
+<li>Java 虚拟机重新分配字段的先后顺序,以达到内存对齐的目的。有三种排列方法,对应 Java 虚拟机选项 -XX:FieldsAllocationStyle，默认值为 1</li>
+<li>Java 虚拟机字段重排列遵循的两个规则<ol>
+<li>如果一个字段占据 C 个字节，那么该字段的偏移量需要对齐至 NC。这里偏移量指的是字段地址与对象的起始地址差值。<br>以 long 类为例，它仅有一个 long 类型的实例字段。在使用了压缩指针的 64 位虚拟机中，尽管对象头的大小为 12 个字节，<br>该 long 类型字段的偏移量也只能是 16，而中间空着的 4 个字节便会被浪费掉。</li>
+<li>子类所继承字段的偏移量，需要与父类对应字段的偏移量保持一致。Java 虚拟机还会对齐子类字段的起始位置。<br>对于使用了压缩指针的 64 位虚拟机，子类第一个字段需要对齐至 4N；而对于关闭了压缩指针的 64 位虚拟机，子类第一个字段则需要对齐至 8N。</li>
+<li></li>
+</ol>
+</li>
+<li>@Contended解决对象字段之间的虚共享（false sharing）问题.这个注释也会影响到字段的排列。</li>
+<li>虚共享:假设两个线程分别访问同一对象中不同的 volatile 字段，逻辑上它们并没有共享内容，因此不需要同步。<br>然而，如果这两个字段恰好在同一个缓存行中，那么对这些字段的写操作会导致缓存行的写回，也就造成了实质上的共享。</li>
+<li>Java 虚拟机会让不同的 @Contended 字段处于独立的缓存行中，因此你会看到大量的空间被浪费掉。</li>
+<li>JOL 工具 打印工程中的类的字段分布情况</li>
+</ul>
+</li>
+</ol>
 
           
         
@@ -1335,7 +1762,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">Artikel</span>
                   </a>
                 </div>
@@ -1425,7 +1852,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">27</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
                     <span class="site-state-item-name">Tags</span>
                   </a>
                 </div>
@@ -1705,6 +2138,10 @@
 
   
   
+    
+      
+    
+      
     
       
     
