@@ -745,6 +745,20 @@
 </li>
 <li><p>String StringBuffer 和 StringBuilder</p>
 <ol>
+<li>String<ul>
+<li>Immutable 类，被声明成为 final class，所有属性也都是 final 的</li>
+<li>拼接、裁剪字符串等动作，都会产生新的 String 对象</li>
+<li>关操作的效率对性能有明显影响</li>
+</ul>
+</li>
+<li>StringBuffer<ul>
+<li>线程安全</li>
+</ul>
+</li>
+<li>StringBuilder<ul>
+<li>非线程安全</li>
+</ul>
+</li>
 <li>可变性<ul>
 <li>String -&gt; private final char value[];  不可变</li>
 <li>StringBuilder 与 StringBuffer 都继承AbstractStringBuilder    char[] value; 可变</li>
@@ -763,6 +777,31 @@
 </ul>
 </li>
 <li>少量数据为了方便直接String   操作大量数据 单线程StringBuilder  多线程StringBuffer</li>
+<li>字符串设计和实现考量<ul>
+<li>String 是 Immutable 类。由于不可变，Immutable 对象在拷贝时不需要额外复制数据。</li>
+<li>StringBuffer修改数据的方法都加上 synchronized 关键字实现的，不必纠结于 synchronized 性能之类的，<br>考虑可靠性、正确性和代码可读性才是大多数应用开发最重要的因素。</li>
+<li>为了实现修改字符序列的目的，StringBuffer 和 StringBuilder 底层都是利用可修改的（char，JDK 9 以后是 byte）数组，<br>二者都继承了 AbstractStringBuilder，里面包含了基本操作，区别仅在于最终的方法是否加了 synchronized。</li>
+<li>初始字符串长度加 16</li>
+<li>非静态的拼接逻辑在 JDK 8 中会自动被 javac 转换为 StringBuilder 操作；</li>
+<li>JDK 9实际是利用了MethodHandle,统一了入口。利用 InvokeDynamic，将字符串拼接的优化与 javac 生成的字节码解耦，<br>假设未来 JVM 增强相关运行时实现，将不需要依赖 javac 的任何修改。</li>
+<li>在JDK9的String类中，维护了这样的一个属性coder，它是一个编码格式的标识，使用LATIN1还是UTF-16，这个是在String生成的时候自动的，<br>如果字符串中都是能用LATIN1就能表示的就是0，否则就是UTF-16.</li>
+</ul>
+</li>
+<li>字符串缓存<ul>
+<li>把常见应用进行堆转储（Dump Heap），然后分析对象组成，会发现平均 25% 的对象是字符串，并且其中约半数是重复的。<br>如果能避免创建重复字符串，可以有效降低内存消耗和对象创建开销。</li>
+<li>intern() 方法，目的是提示 JVM 把相应字符串缓存起来，以备重复使用。</li>
+<li>Java 6 这种历史版本，并不推荐大量使用 intern，为什么呢？魔鬼存在于细节中，被缓存的字符串是存在所谓 PermGen 里的，<br>也就是臭名昭著的“永久代”，这个空间是很有限的，也基本不会被 FullGC 之外的垃圾收集照顾到。所以，如果使用不当，OOM 就会光顾。<br>在后续版本中，这个缓存被放置在堆中，这样就极大避免了永久代占满的问题，甚至永久代在 JDK 8 中被 MetaSpace（元数据区）替代了。<br>而且，默认缓存大小也在不断地扩大中，从最初的 1009，到 7u40 以后被修改为 60013。你可以使用下面的参数直接打印具体数字，<br>可以拿自己的 JDK 立刻试验一下。</li>
+<li>Intern 是一种显式地排重机制，但是它也有一定的副作用，因为需要开发者写代码时明确调用，一是不方便，每一个都显式调用是非常麻烦的；<br>另外就是我们很难保证效率，应用开发阶段很难清楚地预计字符串的重复情况，有人认为这是一种污染代码的实践。</li>
+<li>JDK 8u20 之后，推出了一个新的特性，也就是 G1 GC 下的字符串排重。它是通过将相同数据的字符串指向同一份数据来做到的，<br>是 JVM 底层的改变，并不需要 Java 类库做什么修改。-XX:+UseStringDeduplication</li>
+<li>在运行时，字符串的一些基础操作会直接利用 JVM 内部的 Intrinsic 机制，往往运行的就是特殊优化的本地代码，<br>而根本就不是 Java 代码生成的字节码。Intrinsic 可以简单理解为，是一种利用 native 方式 hard-coded 的逻辑，算是一种特别的内联，<br>很多优化还是需要直接使用特定的 CPU 指令，</li>
+</ul>
+</li>
+<li>String 自身的演化<ul>
+<li>Java 中的 char 是两个 bytes 大小，拉丁语系语言的字符，根本就不需要太宽的 char，这样无区别的实现就造成了一定的浪费。</li>
+<li>Java 9 中，我们引入了 Compact Strings 的设计。从 char 数组，改变为一个 byte 数组加上一个标识编码的所谓 coder，<br>并且将相关字符串操作类都进行了修改。相关的 Intrinsic 之类也都进行了重写</li>
+<li>在极端情况下，字符串也出现了一些能力退化，比如最大字符串的大小。你可以思考下，原来 char 数组的实现，字符串的最大长度就是数组本身的长度限制，<br>但是替换成 byte 数组，同样数组长度下，存储能力是退化了一倍的！还好这是存在于理论中的极限</li>
+</ul>
+</li>
 </ol>
 </li>
 <li><p>在一个静态方法内调用一个非静态成员为什么是非法的</p>
@@ -1097,7 +1136,8 @@
 <li>普通对象引用</li>
 <li>要还有强引用指向一个对象，就能表明对象还“活着”，垃圾收集器不会碰这种对象</li>
 <li>如果没有其他的引用关系 超过了引用的作用域或者显式地将相应（强）引用赋值为 null,就是可以被垃圾收集的了</li>
-<li>强可达（Strongly Reachable），就是当一个对象可以有一个或多个线程可以不通过各种引用访问到的情况。<br>比如，我们新创建一个对象，那么创建它的线程对它就是强可达。</li>
+<li>强可达（Strongly Reachable），就是当一个对象可以有一个或多个线程可以不通过各种引用访问到的情况。</li>
+<li>当JVM内存空间不足，JVM宁愿抛出OutOfMemoryError运行时错误（OOM），使程序异常终止，也不会靠随意回收具有强引用的“存活”对象来解决内存不足的问题<br>比如，我们新创建一个对象，那么创建它的线程对它就是强可达。</li>
 </ul>
 </li>
 <li>软引用（SoftReference）<ul>
@@ -1106,6 +1146,8 @@
 <li>JVM 会确保在抛出 OutOfMemoryError 之前，清理软引用指向的对象。</li>
 <li>软引用通常用来实现内存敏感的缓存.当内存不足时清理掉，这样就保证了使用缓存的同时，不会耗尽内存。</li>
 <li>软可达（Softly Reachable），就是当我们只能通过软引用才能访问到对象的状态。</li>
+<li>软引用通过SoftReference类实现</li>
+<li>软引用可以和一个引用队列（ReferenceQueue）联合使用，如果软引用所引用的对象被垃圾回收器回收，<br>Java虚拟机就会把这个软引用加入到与之关联的引用队列中。后续，我们可以调用ReferenceQueue的poll()方法来检查是否有它所关心的对象被回收。<br>如果队列为空，将返回一个null,否则该方法返回队列中前面的一个Reference对象。</li>
 </ul>
 </li>
 <li>弱引用（WeakReference）<ul>
@@ -1115,6 +1157,11 @@
 <li>维护一种非强制性的映射关系，如果试图获取时对象还在，就使用它，否则重现实例化。</li>
 <li>缓存实现的选择。</li>
 <li>弱可达（Weakly Reachable），类似前面提到的，就是无法通过强引用或者软引用访问，只能通过弱引用访问时的状态。<br>这是十分临近 finalize 状态的时机，当弱引用被清除的时候，就符合 finalize 的条件了。</li>
+<li>通过WeakReference类实现</li>
+<li>生命周期比软引用短</li>
+<li>在垃圾回收器线程扫描它所管辖的内存区域的过程中，一旦发现了具有弱引用的对象，不管当前内存空间足够与否，都会回收它的内存。</li>
+<li>由于垃圾回收器是一个优先级很低的线程，因此不一定会很快回收弱引用的对象。</li>
+<li>弱引用可以和一个引用队列（ReferenceQueue）联合使用，如果弱引用所引用的对象被垃圾回收，<br>Java虚拟机就会把这个弱引用加入到与之关联的引用队列中。</li>
 </ul>
 </li>
 <li>幻象引用（WeakReference）<ul>
@@ -1124,6 +1171,8 @@
 <li>做所谓的 Post-Mortem 清理机制, 利用幻象引用监控对象的创建和销毁。</li>
 <li>幻象可达（Phantom Reachable），就是没有强、软、弱引用关联，并且 finalize 过了，只有幻象引用指向这个对象的时候。</li>
 <li>最后的状态，就是不可达（unreachable），意味着对象可以被清除了。</li>
+<li>PhantomReference类来实现</li>
+<li>无法通过虚引用访问对象的任何属性或函数。<br>-</li>
 </ul>
 </li>
 <li>所有引用类型，都是抽象类 java.lang.ref.Reference 的子类.除了幻象引用（因为 get 永远返回 null），如果对象还没有被销毁，<br>都可以通过 get 方法获取原有对象。利用软引用和弱引用，我们可以将访问到的对象，重新指向强引用，也就是人为的改变了对象的可达性状态</li>
@@ -1154,6 +1203,10 @@
 </ul>
 </li>
 </ol>
+</li>
+<li>强引用、软引用、弱引用、幻象引用<ul>
+<li>可达性（reachable）状态和对垃圾收集的影响。</li>
+</ul>
 </li>
 <li><p>数据类型</p>
 <ol>
