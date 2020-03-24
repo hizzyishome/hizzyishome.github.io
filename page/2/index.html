@@ -304,6 +304,412 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/08/spring-中的事务/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Howard">
+      <meta itemprop="description" content="午夜向日葵，晌午夜光杯。跛者脚下路，屠夫腕上佛。">
+      <meta itemprop="image" content="/images/avatar/P1070776.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="华氏温度">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/08/spring-中的事务/" itemprop="url">
+                  spring 中的事务
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+
+              
+                
+              
+
+              <time title="Post created: 2019-12-08 10:46:58" itemprop="dateCreated datePublished" datetime="2019-12-08T10:46:58+08:00">2019-12-08</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/08/spring-中的事务/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/12/08/spring-中的事务/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="spring中的事务抽象"><a href="#spring中的事务抽象" class="headerlink" title="spring中的事务抽象"></a>spring中的事务抽象</h3><p>在spring中抽象帮助不同的数据框架ORM都能用相同的方式去做操作。  </p>
+<ol>
+<li>一致的事务模型<ul>
+<li>操作数据的方式：JDBC Hibernate myBatis</li>
+<li>DataSource JTA</li>
+</ul>
+</li>
+<li><p>事务抽象类里的核心接口</p>
+<ul>
+<li>PlatformTransactionManager<ul>
+<li>DataSourceTransactionManager</li>
+<li>HibernateTransactionManager</li>
+<li>JtaTransactionManager</li>
+</ul>
+</li>
+<li>TransactionDefinitions(事务定义)<ul>
+<li>Propagation(传播特性)</li>
+<li>Isolation(隔离性)</li>
+<li>Timeout(超时时间)</li>
+<li>Read-only status(只读状态)<br>在PlatformTransactionManager中定义了commit rollback 方法实现统一事务提交，回滚操作。<br>通过getTransaction方法从TransactionDefinitions获取两个接口的参数TransactionStatus。</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li><p>事务的传播特性  </p>
+<p>传播性|值|含<br>-|-|-<br>PROPAFGATION_REQUIRED|0|默认，有事务就用当前事务，没有就创建<br>PROPAFGATION_SUPPORTS|1|事务可有可无，不是必须的<br>PROPAFGATION_MANDARTORY|2|当前必须要有事务，没有就报错<br>PROPAFGATION_REQUIRES_NEW|3|无论是否有事务，都起新事务,之前的挂起.事务之间没有关联。事务之前结果不相互影响<br>PROPAFGATION_NOT_SUPPORTED|4|不支持事务，按照非事务方式运行<br>PROPAFGATION_NEVER|5|不支持事务，有事务就抛异常<br>PROPAFGATION_NESTED|6|内嵌事务，如果有事务，在当前事务中再起一个事务。<br>内嵌事务的结果（是否回滚），影响外部事务的执行。外部回滚，内部也回滚。内部抛异常，回滚了，外部不受影响。 </p>
+</li>
+<li><p>事务的隔离性  </p>
+<p>默认-1 需要配置</p>
+<p>隔离性|值|脏读|不可重复读|幻读<br>-|-|-|-|-<br>ISOLATION_READ_UNCOMMITTED|1|√|√|√<br>ISOLATION_READ_UNCOMMITTED|2|×|√|√<br>ISOLATION_READ_UNCOMMITTED|3|×|×|√<br>ISOLATION_READ_UNCOMMITTED|4|×|×|×</p>
+</li>
+</ol>
+</li>
+<li><p>编程式事务</p>
+<ol>
+<li>Transaction Template(基本简单方式)<ul>
+<li>TransactionCallback</li>
+<li>TransactionCallbackWithoutResult </li>
+</ul>
+</li>
+<li>PlatformTransactionManager<ul>
+<li>可以传入TransactionDefinittion进行定义</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>声明式事务  </p>
+<ol>
+<li>利用aop-proxy在目标方法上操作。  <ol>
+<li>caller调用proxy代理，而不是直接调用目标方法</li>
+<li>代理掉用Transaction Advisor，此时创建事务</li>
+<li>代理掉用Transaction Advisor调用Custom Advisor</li>
+<li>运行用户interceptors的before操作</li>
+<li>调用目标方法，执行业务逻辑</li>
+<li>执行后，返回结果，也可能没有结果返回void</li>
+<li>Custom Advisor运行用户interceptors的after操作，返回给Transaction Advisor</li>
+<li>Transaction Advisor事务操作成功commit，失败rollback</li>
+<li>返回给proxy代理</li>
+<li>返回给调用者 caller</li>
+</ol>
+</li>
+<li>配置方式<ol>
+<li>开启方式 注解 <code>@EnabelTransactionManagement</code> xml <code>&lt;tx:annotation-driver&gt;</code></li>
+<li>配置<ul>
+<li>proxyTargetClass true false 基于接口还是基于类</li>
+<li>mode  Aop 默认java 可以改Spj</li>
+<li>order 事务Aop拦截顺序，默认最低</li>
+</ul>
+</li>
+<li>方法或类上加<code>@Transactional</code><ul>
+<li>transactionManager</li>
+<li>propagation</li>
+<li>isolation</li>
+<li>timeOut</li>
+<li>readOnly</li>
+<li>判断回滚策略（可配置某些异常类型回滚）</li>
+</ul>
+</li>
+<li>一个没有配置<code>@Transactional</code>的方法，内部调用一个配置了<code>@Transactional</code>的方法<br>不会有事务的支持（外方法没有调用代理去做操作）。默认情 况下，spring aop同级调用失效，<br>因为同级无法创建代理对象，而事务是通过aop代理类实现的。<br>最简单是，把自己的实例注入进来，内部直接调用改成，用自己的实例<br>调用，因为自己的实例spring帮你创建了一个代理类，我们直接调用就行。也可以通过<br>AopContext.currentProxy()获取当前类的代理对象，再调用子方法，其实是增强后的的方法<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><h5 id="spring声明式事务本质上是通过AOP来增强类的功能"><a href="#spring声明式事务本质上是通过AOP来增强类的功能" class="headerlink" title="spring声明式事务本质上是通过AOP来增强类的功能"></a>spring声明式事务本质上是通过AOP来增强类的功能</h5></li>
+</ol>
+<ul>
+<li>before after</li>
+<li>AOP创建动态代理<h5 id="REQUEST——NEW"><a href="#REQUEST——NEW" class="headerlink" title="REQUEST——NEW"></a>REQUEST——NEW</h5></li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/07/spring-boot搭建问题全记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Howard">
+      <meta itemprop="description" content="午夜向日葵，晌午夜光杯。跛者脚下路，屠夫腕上佛。">
+      <meta itemprop="image" content="/images/avatar/P1070776.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="华氏温度">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/07/spring-boot搭建问题全记录/" itemprop="url">
+                  spring boot搭建问题全记录
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+
+              
+                
+              
+
+              <time title="Post created: 2019-12-07 16:11:30" itemprop="dateCreated datePublished" datetime="2019-12-07T16:11:30+08:00">2019-12-07</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/码文/" itemprop="url" rel="index"><span itemprop="name">码文</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/07/spring-boot搭建问题全记录/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/12/07/spring-boot搭建问题全记录/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>actuator/beans 访问返回 <code>Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback.</code>错误<br> 你可以试试直接访问 <a href="http://localhost:8080/actuator/,返回" target="_blank" rel="noopener">http://localhost:8080/actuator/,返回</a><br> <code>{&quot;_links&quot;:{&quot;self&quot;:{&quot;href&quot;:&quot;http://localhost:8080/actuator&quot;,&quot;templated&quot;:false},&quot;health&quot;:{&quot;href&quot;:&quot;http://localhost:8080/actuator/health&quot;,&quot;templated&quot;:false},&quot;health-path&quot;:{&quot;href&quot;:&quot;http://localhost:8080/actuator/health/{*path}&quot;,&quot;templated&quot;:true},&quot;info&quot;:{&quot;href&quot;:&quot;http://localhost:8080/actuator/info&quot;,&quot;templated&quot;:false}}}</code><br> 可以看见默认开放的只有<code>health`</code>info<code>和</code>health-path<code>（看某个接口的health状态）。
+ 在application.properties文件里配置</code>management.endpoints.web.exposure.include=*` 可以根据自己需要打开某些接口。<br> 配置后可以发发现可以看项目中的很多信息，包括初始化的bean,caches-cache,caches,conditions,configprops,env,loggers,mappings等等</li>
+<li></li>
+<li></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/26/翻译-可检查异常：Java最大的错误/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2927,176 +3333,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/10/诗开头-md/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Howard">
-      <meta itemprop="description" content="午夜向日葵，晌午夜光杯。跛者脚下路，屠夫腕上佛。">
-      <meta itemprop="image" content="/images/avatar/P1070776.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="华氏温度">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/10/诗开头-md/" itemprop="url">
-                  诗开头
-                </a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-
-              
-                
-              
-
-              <time title="Post created: 2018-07-10 00:27:32" itemprop="dateCreated datePublished" datetime="2018-07-10T00:27:32+08:00">2018-07-10</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">in</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/古风/" itemprop="url" rel="index"><span itemprop="name">古风</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/07/10/诗开头-md/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/10/诗开头-md/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="清平乐·别来春半"><a href="#清平乐·别来春半" class="headerlink" title="清平乐·别来春半"></a>清平乐·别来春半</h1><h6 id="——李煜"><a href="#——李煜" class="headerlink" title="——李煜"></a>——李煜</h6><h3 id="别来春半-触目柔肠断。"><a href="#别来春半-触目柔肠断。" class="headerlink" title="别来春半,触目柔肠断。"></a>别来春半,触目柔肠断。</h3><h3 id="砌下落梅如雪乱，拂了一身还满。"><a href="#砌下落梅如雪乱，拂了一身还满。" class="headerlink" title="砌下落梅如雪乱，拂了一身还满。"></a>砌下落梅如雪乱，拂了一身还满。</h3><h3 id="雁来音信无凭，路遥归梦难成。"><a href="#雁来音信无凭，路遥归梦难成。" class="headerlink" title="雁来音信无凭，路遥归梦难成。"></a>雁来音信无凭，路遥归梦难成。</h3><h3 id="离恨恰如春草，更行更远还生。"><a href="#离恨恰如春草，更行更远还生。" class="headerlink" title="离恨恰如春草，更行更远还生。"></a>离恨恰如春草，更行更远还生。</h3>
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -3143,7 +3384,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">Artikel</span>
                   </a>
                 </div>
@@ -3166,7 +3407,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">Kategorien</span>
                   </a>
                 </div>
@@ -3243,7 +3486,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">32</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">34</span>
                     <span class="site-state-item-name">Tags</span>
                   </a>
                 </div>
@@ -3532,6 +3779,8 @@
 
   
   
+    
+      
     
       
     
